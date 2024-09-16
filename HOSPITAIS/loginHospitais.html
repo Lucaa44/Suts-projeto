@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Hospital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="cssLoginHospitais/loginHospitais.css">
+    <script src="loginHospitais.js/loginHospitais.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Login Hospital</h1>
+    </header>
+
+    <main>
+        <section class="login-section">
+            <h2>Acesse seu Perfil</h2>
+            <form id="hospitalLoginForm">
+                <div class="form-group">
+                    <label for="cnpj">CNPJ:</label>
+                    <input type="text" id="cnpj" name="cnpj" required>
+                    <span class="error-message" id="cnpjError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha:</label>
+                    <input type="password" id="password" name="password" required>
+                    <span class="error-message" id="passwordError"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Entrar">
+                </div>
+                <div id="loading" class="loading" style="display: none;">Entrando...</div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Sistema de Doação de Sangue. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
