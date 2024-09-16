@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Hospital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="cssPerfilHospitais/perfilHospitais.css">
+    <link rel="stylesheet" href="cssPerfilHospitais/modais.css">
+    <script src="perfilHospitais.js/perfilHospitais.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-hospital"></i> Perfil do Hospital</h1>
+    </header>
+
+    <main>
+        <!-- Navegação por abas -->
+        <div class="tabs">
+            <button class="tab-button active" data-tab="hospital-info"><i class="fas fa-info-circle"></i> Dados do Hospital</button>
+            <button class="tab-button" data-tab="donation-needs"><i class="fas fa-heart"></i> Vagas de Doação</button>
+            <button class="tab-button" data-tab="settings"><i class="fas fa-cog"></i> Configurações</button>
+        </div>
+
+        <!-- Seção de Dados do Hospital -->
+        <section id="hospital-info" class="tab-content active">
+            <h2>Informações do Hospital</h2>
+            <div class="hospital-details">
+                <p><i class="fas fa-hospital"></i> <strong>Nome:</strong> <span id="hospitalName"></span></p>
+                <p><i class="fas fa-id-card"></i> <strong>CNPJ:</strong> <span id="cnpj"></span></p>
+                <p><i class="fas fa-envelope"></i> <strong>Email:</strong> <span id="email"></span></p>
+                <p><i class="fas fa-phone"></i> <strong>Telefone:</strong> <span id="phone"></span></p>
+                <p><i class="fas fa-map-marker-alt"></i> <strong>Endereço:</strong> <span id="address"></span></p>
+                <p><i class="fas fa-user-md"></i> <strong>Especialidades:</strong> <span id="specialties"></span></p>
+                <p><i class="fas fa-map"></i> <strong>Localização:</strong> <span id="city"></span> - <span id="state"></span></p>
+            </div>
+            <button id="editInfoBtn" class="cta-button"><i class="fas fa-edit"></i> Editar Informações</button>
+        </section>
+
+        <!-- Seção de Vagas de Doação -->
+        <section id="donation-needs" class="tab-content">
+            <h2><i class="fas fa-heart"></i> Vagas de Doação de Sangue</h2>
+            <div class="vacancies">
+                <div class="vacancy-item">
+                    <p><i class="fas fa-tint"></i> <strong>Tipo Sanguíneo:</strong> O+</p>
+                    <p><i class="fas fa-medkit"></i> <strong>Quantidade Necessária:</strong> 5 bolsas</p>
+                    <p><i class="fas fa-exclamation-triangle"></i> <strong>Urgência:</strong> Alta</p>
+                </div>
+            </div>
+            <button id="addVacancyBtn" class="cta-button"><i class="fas fa-plus-circle"></i> Adicionar Necessidade</button>
+        </section>
+
+        <!-- Seção de Configurações -->
+        <section id="settings" class="tab-content">
+            <h2><i class="fas fa-cog"></i> Configurações da Conta</h2>
+            <div class="settings-options">
+                <p>Configurações gerais de conta e preferências.</p>
+            </div>
+        </section>
+
+        <!-- Modal para Edição -->
+        <div id="editModal" class="modal" aria-hidden="true">
+            <div class="modal-content">
+                <span id="closeModalBtn" class="close" aria-label="Fechar">&times;</span>
+                <h2><i class="fas fa-edit"></i> Editar Informações</h2>
+                <form id="editForm">
+                    <div class="form-group">
+                        <label for="editPhone"><i class="fas fa-phone"></i> Telefone:</label>
+                        <input type="tel" id="editPhone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editAddress"><i class="fas fa-map-marker-alt"></i> Endereço:</label>
+                        <input type="text" id="editAddress" name="address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSpecialties"><i class="fas fa-user-md"></i> Especialidades Médicas:</label>
+                        <textarea id="editSpecialties" name="specialties" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Salvar Alterações">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal para Adicionar Vaga -->
+        <div id="addVacancyModal" class="modal" aria-hidden="true">
+            <div class="modal-content">
+                <span id="closeVacancyModalBtn" class="close" aria-label="Fechar">&times;</span>
+                <h2><i class="fas fa-plus-circle"></i> Adicionar Necessidade de Doação</h2>
+                <form id="vacancyForm">
+                    <div class="form-group">
+                        <label for="bloodType"><i class="fas fa-tint"></i> Tipo Sanguíneo:</label>
+                        <select id="bloodType" name="bloodType" required>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity"><i class="fas fa-medkit"></i> Quantidade Necessária (bolsas):</label>
+                        <input type="number" id="quantity" name="quantity" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="urgency"><i class="fas fa-exclamation-triangle"></i> Urgência:</label>
+                        <select id="urgency" name="urgency" required>
+                            <option value="Baixa">Baixa</option>
+                            <option value="Média">Média</option>
+                            <option value="Alta">Alta</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Adicionar Necessidade">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Sistema de Doação de Sangue. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>

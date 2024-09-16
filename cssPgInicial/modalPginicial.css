@@ -1,0 +1,91 @@
+/* Estilos básicos para o modal */
+.info-modal {
+    display: none; /* Inicialmente oculto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilos para o conteúdo do modal */
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px; /* Largura máxima */
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease-in-out; /* Animação de entrada */
+}
+
+/* Animação de fade in */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Estilos para o botão de fechar */
+.modal-content .close {
+    color: #333;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+}
+
+.modal-content .close:hover {
+    color: #e74c3c; /* Cor ao passar o mouse */
+}
+
+/* Estilos para o formulário de login */
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content form .form-group {
+    margin-bottom: 15px;
+}
+
+.modal-content form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.modal-content form input[type="email"],
+.modal-content form input[type="password"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.modal-content form input[type="submit"] {
+    background-color: #3498db;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.modal-content form input[type="submit"]:hover {
+    background-color: #2980b9; /* Cor ao passar o mouse */
+}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Hospital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="cssCadastroHospitais/cadastroHospitais.css">
+    <script src="cadastroHospitais.js/cadastroHospitais.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Cadastro de Hospital</h1>
+    </header>
+
+    <main>
+        <section class="hospital-registration">
+            <h2>Registre seu Hospital</h2>
+            <form id="hospitalForm">
+                <!-- Nome do Hospital -->
+                <div class="form-group">
+                    <label for="hospitalName">Nome do Hospital:</label>
+                    <input type="text" id="hospitalName" name="hospitalName" placeholder="Ex: Hospital São João" required>
+                    <span class="error-message" id="hospitalNameError"></span>
+                </div>
+
+                <!-- CNPJ -->
+                <div class="form-group">
+                    <label for="cnpj">CNPJ:</label>
+                    <input type="text" id="cnpj" name="cnpj" placeholder="Ex: 12.345.678/0001-99" required>
+                    <span class="error-message" id="cnpjError"></span>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Ex: hospital@exemplo.com" required>
+                    <span class="error-message" id="emailError"></span>
+                </div>
+
+                <!-- Senha -->
+                <div class="form-group">
+                    <label for="password">Senha:</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" placeholder="Mínimo 6 caracteres" required>
+                        <span class="toggle-password" onclick="togglePassword()">👁️</span>
+                    </div>
+                    <span class="error-message" id="passwordError"></span>
+                </div>
+
+                <!-- Telefone -->
+                <div class="form-group">
+                    <label for="phone">Telefone:</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Ex: (11) 1234-5678" required>
+                    <span class="error-message" id="phoneError"></span>
+                </div>
+
+                <!-- Endereço -->
+                <div class="form-group">
+                    <label for="address">Endereço Completo:</label>
+                    <input type="text" id="address" name="address" placeholder="Ex: Rua Exemplo, 123" required>
+                    <span class="error-message" id="addressError"></span>
+                </div>
+
+                <!-- Cidade -->
+                <div class="form-group">
+                    <label for="city">Cidade:</label>
+                    <input type="text" id="city" name="city" placeholder="Ex: São Paulo" required>
+                </div>
+
+                <!-- Estado -->
+                <div class="form-group">
+                    <label for="state">Estado:</label>
+                    <select id="state" name="state" required>
+                        <option value="">Selecione o estado</option>
+                        <option value="AC">Acre</option>
+                        <option value="AL">Alagoas</option>
+                        <!-- Outros estados -->
+                    </select>
+                </div>
+
+                <!-- Especialidades Médicas -->
+                <div class="form-group">
+                    <label for="specialties">Especialidades Médicas:</label>
+                    <textarea id="specialties" name="specialties" placeholder="Ex: Cardiologia, Ortopedia, Pediatria..." rows="4" required></textarea>
+                    <span class="error-message" id="specialtiesError"></span>
+                </div>
+
+                <!-- Botão de Enviar -->
+                <div class="form-group">
+                    <input type="submit" value="Cadastrar">
+                </div>
+
+                <!-- Carregando -->
+                <div id="loading" class="loading" style="display: none;">
+                    <div class="spinner"></div> Registrando...
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Sistema de Doação de Sangue. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Doador</title>
+    <link rel="stylesheet" href="cssPerfilDoador/PerfilDoador.css">
+    <script src="PerfilDoador.js/PerfilDoador.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <h1>Meu Perfil</h1>
+    </header>
+
+    <main>
+        <!-- Seção de Cabeçalho do Perfil -->
+        <section class="profile-header">
+            <img src="../images/profile-picture.png" alt="Foto do Perfil" class="profile-picture">
+            <div class="profile-info">
+                <h2 id="userName"></h2> <!-- Será preenchido com o nome do usuário -->
+                <p><strong>Tipo Sanguíneo:</strong> <span id="userBloodType"></span></p> <!-- Preencher com o tipo sanguíneo -->
+                <p><strong>Email:</strong> <span id="userEmail"></span></p> <!-- Preencher com o email -->
+                <p><strong>CPF:</strong> <span id="userCPF"></span></p> <!-- Preencher com o CPF -->
+            </div>
+        </section>
+
+        <!-- Abas de Navegação -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('infoPersonais')">Informações Pessoais</button>
+            <button class="tab-button" onclick="showTab('doacoes')">Histórico de Doações</button>
+            <button class="tab-button" onclick="showTab('pendencias')">Pendências</button>
+            <button class="tab-button" onclick="showTab('recompensas')">Insígnias</button>
+            <button class="tab-button" onclick="showTab('notificacoes')">Notificações</button>
+        </div>
+
+        <!-- Conteúdo das Abas -->
+        <section id="infoPersonais" class="tab-content">
+            <h2>Informações Pessoais</h2>
+            <p><strong>Nome Completo:</strong> <span id="userNamePersonal"></span></p> <!-- Preencher com o nome -->
+            <p><strong>Tipo Sanguíneo:</strong> <span id="userBloodTypePersonal"></span></p> <!-- Preencher com o tipo sanguíneo -->
+            <p><strong>Informações de Contato:</strong> <span id="userEmailPersonal"></span></p> <!-- Preencher com o email -->
+            <p><strong>CPF:</strong> <span id="userCPFPersonal"></span></p> <!-- Preencher com o CPF -->
+            <section id="edit-profile">
+                <button class="edit-button">Editar Perfil</button>
+            </section>
+        </section>
+
+        <!-- Outras seções como Histórico de Doações, Pendências, etc. -->
+        <!-- Essas seções não precisam de alterações imediatas, pois elas exibem dados específicos e podem ser gerenciadas separadamente -->
+
+        <a href="AcessoDoador.html">
+            <button class="cta-button">Voltar</button>
+        </a>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Site Unificado de Transfusão Sanguínea. Todos os direitos reservados.</p>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUTS-Doações de Sangue</title>
+    <link rel="stylesheet" href="cssAcessoDoador/AcessoDoador.css">
+    <script src="AcessoDoadorJS/AcessoDoador.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <h1>Bem-vindo à SUTS-Doações de Sangue</h1>
+    </header>
+
+    <main>
+        <section class="cta-description">
+            <div class="cta-link">
+                <a href="PgDoador.html">
+                    <button class="cta-button">Cadastre-se Antes de Doar</button>
+                </a>
+                <p>Cadastre-se para ajudar a salvar vidas através da doação de sangue.</p>
+            </div>
+
+            <div class="cta-link">
+                <a href="PerfilDoador.html">
+                    <button id="openModalBtn" class="cta-button">Acessar Perfil</button>
+                </a>
+                <p>Acesse seu perfil para acompanhar suas doações e atualizações.</p>
+            </div>
+        </section>
+
+        <section class="highlights">
+            <h2>Por que se cadastrar?</h2>
+            <ul>
+                <li>Acompanhe suas doações de sangue facilmente.</li>
+                <li>Receba notificações quando seu tipo sanguíneo for necessário.</li>
+                <li>Acesso rápido ao histórico de doações.</li>
+                <li>Contribua para salvar vidas!</li>
+            </ul>
+        </section>
+
+        <section class="testimonials">
+            <h2>Depoimentos</h2>
+            <div class="testimonial">
+                <p>"Doar sangue é uma experiência incrível! Saber que ajudei a salvar uma vida me enche de alegria." - João Silva</p>
+            </div>
+            <div class="testimonial">
+                <p>"Recebi uma transfusão de sangue que salvou minha vida. Sou eternamente grata aos doadores." - Maria Oliveira</p>
+            </div>
+        </section>
+
+        <section class="faq">
+            <h2>Perguntas Frequentes</h2>
+            <div class="faq-item">
+                <h3>Quem pode doar sangue?</h3>
+                <p>Pessoas saudáveis entre 18 e 69 anos, com mais de 50kg, podem doar sangue.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Quantas vezes posso doar sangue por ano?</h3>
+                <p>Homens podem doar até 4 vezes por ano, e mulheres até 3 vezes por ano.</p>
+            </div>
+        </section>
+
+        <!-- Modal para Login -->
+        <div id="loginModal" class="modal" aria-hidden="true">
+            <div class="modal-content">
+                <span id="closeModalBtn" class="close" aria-label="Fechar">&times;</span>
+                <h2>Login</h2>
+                <p>Informe seus dados para acessar seu perfil:</p>
+                <form id="loginForm" action="PerfilDoador.html" method="post">
+                    <div class="form-group">
+                        <label for="email">E-mail:</label>
+                        <input type="email" id="email" name="email" required>
+                        <div id="emailError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Senha:</label>
+                        <input type="password" id="password" name="password" required>
+                        <div id="passwordError" class="error-message"></div>
+                    </div>
+                    <input type="submit" value="Entrar">
+                </form>
+                <div id="loading" class="loading">Carregando...</div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Site Unificado de Transfusão Sanguínea. Todos os direitos reservados.</p>
+        <nav>
+            <ul class="footer-nav">
+                <li><a href="sobre.html">Sobre Nós</a></li>
+                <li><a href="contato.html">Contato</a></li>
+                <li><a href="politica-privacidade.html">Política de Privacidade</a></li>
+                <li><a href="termos-uso.html">Termos de Uso</a></li>
+            </ul>
+        </nav>
+    </footer>
+</body>
+
+</html>
