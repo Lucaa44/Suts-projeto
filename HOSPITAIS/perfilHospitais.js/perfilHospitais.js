@@ -25,39 +25,50 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('city').textContent = 'São Paulo';
     document.getElementById('state').textContent = 'SP';
 
+    // Lista de vagas (exemplo estático, substituir com dados da API)
+    const vacancies = [
+        { bloodType: 'O+', quantity: 5, urgency: 'Alta' },
+        { bloodType: 'A-', quantity: 2, urgency: 'Média' }
+    ];
+
+    // Renderiza lista resumida de vagas
+    const vacanciesContainer = document.querySelector('.vacancies');
+    vacanciesContainer.innerHTML = ''; // Limpa conteúdo existente
+
+    vacancies.forEach(vacancy => {
+        const vacancyItem = document.createElement('div');
+        vacancyItem.classList.add('vacancy-item');
+        vacancyItem.innerHTML = `
+            <p><i class="fas fa-tint"></i> <strong>Tipo Sanguíneo:</strong> ${vacancy.bloodType}</p>
+            <p><i class="fas fa-medkit"></i> <strong>Quantidade Necessária:</strong> ${vacancy.quantity} bolsas</p>
+            <p><i class="fas fa-exclamation-triangle"></i> <strong>Urgência:</strong> ${vacancy.urgency}</p>
+        `;
+        vacanciesContainer.appendChild(vacancyItem);
+    });
+
+    // Redirecionar para a página de gerenciamento de vagas
+    const goToManageVacanciesBtn = document.getElementById('goToManageVacanciesBtn');
+    goToManageVacanciesBtn.addEventListener('click', function () {
+        window.location.href = 'GerenciamentoVagas.html'; // Ajuste o caminho conforme necessário
+    });
+
     // Função para abrir e fechar o modal de edição
     const editModal = document.getElementById('editModal');
     const editBtn = document.getElementById('editInfoBtn');
     const closeModalBtn = document.getElementById('closeModalBtn');
 
     editBtn.addEventListener('click', function () {
-        editModal.style.display = 'flex';
+        editModal.style.display = 'flex'; // Certifique-se de que o modal seja exibido corretamente
     });
 
     closeModalBtn.addEventListener('click', function () {
         editModal.style.display = 'none';
     });
 
-    // Função para abrir e fechar o modal de adicionar vaga
-    const addVacancyModal = document.getElementById('addVacancyModal');
-    const addVacancyBtn = document.getElementById('addVacancyBtn');
-    const closeVacancyModalBtn = document.getElementById('closeVacancyModalBtn');
-
-    addVacancyBtn.addEventListener('click', function () {
-        addVacancyModal.style.display = 'flex';
-    });
-
-    closeVacancyModalBtn.addEventListener('click', function () {
-        addVacancyModal.style.display = 'none';
-    });
-
     // Fechar modais ao clicar fora do conteúdo
     window.addEventListener('click', function (event) {
         if (event.target === editModal) {
             editModal.style.display = 'none';
-        }
-        if (event.target === addVacancyModal) {
-            addVacancyModal.style.display = 'none';
         }
     });
 
@@ -67,13 +78,5 @@ document.addEventListener('DOMContentLoaded', function () {
         // Ações para salvar as informações (substituir com a lógica de atualização na API)
         alert('Informações do hospital atualizadas com sucesso!');
         editModal.style.display = 'none';
-    });
-
-    // Evento para adicionar uma nova vaga de doação
-    document.getElementById('vacancyForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        // Ações para adicionar a vaga (substituir com a lógica da API)
-        alert('Necessidade de doação adicionada com sucesso!');
-        addVacancyModal.style.display = 'none';
     });
 });

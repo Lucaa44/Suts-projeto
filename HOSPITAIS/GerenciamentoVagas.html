@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento do Hospital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="cssGerenciamentoVagas/GerenciamentoVagas.css">
+    <link rel="stylesheet" href="cssGerenciamentoVagas/modal.css">
+    <script src="GerenciamentoVaga.js/GerenciamentoVagas.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Gerenciamento do Hospital</h1>
+    </header>
+
+    <main>
+        <!-- Abas de Navegação -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('manageVacancies')">Gerenciar Vagas</button>
+            <button class="tab-button" onclick="showTab('donationHistory')">Histórico de Vagas</button>
+            <button class="tab-button" onclick="showTab('editInfo')">Editar Vagas</button>
+        </div>
+
+        <!-- Conteúdo das Abas -->
+        <!-- Gerenciar Vagas -->
+        <section id="manageVacancies" class="tab-content active">
+            <h2>Gerenciar Vagas</h2>
+            <!-- Painel de Filtros -->
+            <div class="filter-panel">
+                <label for="bloodTypeFilter">Tipo Sanguíneo:</label>
+                <select id="bloodTypeFilter">
+                    <option value="">Todos</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+                <label for="urgencyFilter">Urgência:</label>
+                <select id="urgencyFilter">
+                    <option value="">Todas</option>
+                    <option value="Baixa">Baixa</option>
+                    <option value="Média">Média</option>
+                    <option value="Alta">Alta</option>
+                </select>
+                <button id="applyFiltersBtn" class="cta-button">Aplicar Filtros</button>
+            </div>
+            <!-- Lista de Vagas -->
+            <div class="vacancies-list">
+                <!-- Lista de Vagas será preenchida via JavaScript -->
+            </div>
+            <button id="addVacancyBtn" class="cta-button">Adicionar Nova Vaga</button>
+        </section>
+
+       <!-- Modal para Adicionar Nova Vaga -->
+        <div id="addVacancyModal" class="modal">
+            <div class="modal-content">
+                <span id="closeVacancyModalBtn" class="close">&times;</span>
+                <h2>Adicionar Nova Vaga</h2>
+                <form id="addVacancyForm">
+                    <div class="form-group">
+                        <label for="bloodType">Tipo Sanguíneo:</label>
+                        <select id="bloodType" name="bloodType" required>
+                            <option value="">Selecione</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Quantidade Necessária:</label>
+                        <input type="number" id="quantity" name="quantity" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="urgency">Urgência:</label>
+                        <select id="urgency" name="urgency" required>
+                            <option value="">Selecione</option>
+                            <option value="Baixa">Baixa</option>
+                            <option value="Média">Média</option>
+                            <option value="Alta">Alta</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="deadline">Data Limite:</label>
+                        <input type="date" id="deadline" name="deadline" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Descrição:</label>
+                        <textarea id="description" name="description" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Local da Coleta:</label>
+                        <input type="text" id="location" name="location">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact">Contato para Dúvidas:</label>
+                        <input type="text" id="contact" name="contact">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Salvar Vaga">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Histórico de Vagas -->
+        <section id="donationHistory" class="tab-content">
+            <h2>Histórico de Vagas</h2>
+            <div class="donation-history">
+                <!-- Histórico de Vagas será preenchido via JavaScript -->
+            </div>
+        </section>
+
+        <!-- Editar Vagas -->
+        <section id="editInfo" class="tab-content">
+            <h2>Editar Vagas</h2>
+            <div class="vacancies-list">
+                <!-- Lista de Vagas Editáveis será preenchida via JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Sistema de Doação de Sangue. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
