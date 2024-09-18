@@ -27,20 +27,29 @@ model User {
 
 
 model Hospital {
-  id        Int      @id @default(autoincrement())
-  name      String
-  location  String
-  city      String
-  state     String
-  vacancies Vacancy[]
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String   @unique
+  phone      String
+  address    String
+  specialties String
+  vacancies  Vacancy[]
 }
 
 model Vacancy {
   id          Int      @id @default(autoincrement())
   bloodType   String
+  quantity    Int
+  urgency     String
+  deadline    DateTime
   description String
-  hospital    Hospital @relation(fields: [hospitalId], references: [id])
+  location    String
+  contact     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   hospitalId  Int
+  hospital    Hospital @relation(fields: [hospitalId], references: [id])
 }
+
 
 
