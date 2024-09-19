@@ -1,6 +1,6 @@
 const express = require('express');
-const { registerHospital, loginHospital, getHospitalProfile } = require('../controllers/hospitalController');
-const { protectHospital } = require('../middleware/authHospitalMiddleware');
+const { registerHospital, loginHospital, getHospitalProfile } = require('../routes/');
+const { protect } = require('../middleware/authHospitalMiddleware.js');
 
 const router = express.Router();
 
@@ -11,6 +11,6 @@ router.post('/register', registerHospital);
 router.post('/login', loginHospital);
 
 // Rota para obter o perfil do hospital autenticado
-router.get('/profile', protectHospital, getHospitalProfile);
+router.get('/profile', protect, getHospitalProfile);
 
 module.exports = router;

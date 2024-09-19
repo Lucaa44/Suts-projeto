@@ -5,12 +5,12 @@ const jwt = require('jsonwebtoken');
 
 // Registro de um novo hospital
 const registerHospital = async (req, res) => {
-    const { name, email, phone, address, specialties, password } = req.body;
+    const { name, cnpj, email, phone, address, specialties, password } = req.body;
 
     try {
         // Verifica se o hospital já existe pelo email
         const existingHospital = await prisma.hospital.findUnique({
-            where: { email }
+            where: { cnpj }
         });
 
         if (existingHospital) {
@@ -26,6 +26,7 @@ const registerHospital = async (req, res) => {
             data: {
                 name,
                 email,
+                cnpj,
                 phone,
                 address,
                 specialties,
@@ -42,6 +43,7 @@ const registerHospital = async (req, res) => {
             id: newHospital.id,
             name: newHospital.name,
             email: newHospital.email,
+            cnpj: newHospital.cnpj,
             phone: newHospital.phone,
             address: newHospital.address,
             specialties: newHospital.specialties,
@@ -55,11 +57,11 @@ const registerHospital = async (req, res) => {
 
 // Login do hospital
 const loginHospital = async (req, res) => {
-    const { email, password } = req.body;
+    const { cnpj, password } = req.body;
 
     try {
         const hospital = await prisma.hospital.findUnique({
-            where: { email }
+            where: { cnpj }
         });
 
         if (hospital && (await bcrypt.compare(password, hospital.password))) {
@@ -71,7 +73,7 @@ const loginHospital = async (req, res) => {
             res.json({
                 id: hospital.id,
                 name: hospital.name,
-                email: hospital.email,
+                cnpj: hospital.cnpj,
                 token
             });
         } else {
@@ -94,6 +96,7 @@ const getHospitalProfile = async (req, res) => {
             res.json({
                 id: hospital.id,
                 name: hospital.name,
+                cnpj: hospital.cnpj,
                 email: hospital.email,
                 phone: hospital.phone,
                 address: hospital.address,

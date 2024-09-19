@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Hospital" ALTER COLUMN "cnpj" SET DATA TYPE TEXT;
