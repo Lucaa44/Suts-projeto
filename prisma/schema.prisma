@@ -34,6 +34,7 @@ model Hospital {
   phone      String
   address    String
   specialties String
+  password      String
   vacancies  Vacancy[]
 }
 

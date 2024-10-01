@@ -1,31 +1,55 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
+    // Token JWT armazenado após o login
+    const token = localStorage.getItem('hospitalToken');
+    
+    if (!token) {
+        window.location.href = 'loginHospitais.html'; // Redireciona se não estiver autenticado
+        return;
+    }
+
+    try {
+        // Faz requisição para obter o perfil do hospital
+        const response = await fetch('http://localhost:5000/api/hospitals/profile', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // Preenche os dados reais do hospital
+            document.getElementById('hospitalName').textContent = data.name;
+            document.getElementById('cnpj').textContent = data.cnpj;
+            document.getElementById('email').textContent = data.email;
+            document.getElementById('phone').textContent = data.phone;
+            document.getElementById('address').textContent = data.address;
+            document.getElementById('specialties').textContent = data.specialties;
+        } else {
+            alert('Erro ao carregar os dados do hospital.');
+            window.location.href = 'loginHospitais.html';
+        }
+    } catch (error) {
+        console.error('Erro ao carregar os dados do hospital:', error);
+        alert('Erro ao carregar os dados. Tente novamente mais tarde.');
+    }
+
     // Navegação por abas
     const tabs = document.querySelectorAll('.tab-button');
     const contents = document.querySelectorAll('.tab-content');
 
     tabs.forEach((tab, index) => {
         tab.addEventListener('click', function () {
-            // Remove 'active' de todas as abas e conteúdo
             tabs.forEach(t => t.classList.remove('active'));
             contents.forEach(c => c.classList.remove('active'));
-
-            // Adiciona 'active' à aba clicada e ao conteúdo correspondente
             tab.classList.add('active');
             contents[index].classList.add('active');
         });
     });
 
-    // Preenchendo as informações do hospital no perfil (exemplo estático, você vai substituir com dados da API)
-    document.getElementById('hospitalName').textContent = 'Hospital Central';
-    document.getElementById('cnpj').textContent = '12.345.678/0001-90';
-    document.getElementById('email').textContent = 'contato@hospitalcentral.com.br';
-    document.getElementById('phone').textContent = '(11) 1234-5678';
-    document.getElementById('address').textContent = 'Rua das Flores, 123';
-    document.getElementById('specialties').textContent = 'Cardiologia, Pediatria';
-    document.getElementById('city').textContent = 'São Paulo';
-    document.getElementById('state').textContent = 'SP';
-
-    // Lista de vagas (exemplo estático, substituir com dados da API)
+    // Exemplo estático de vagas (substitua por dados reais da API)
     const vacancies = [
         { bloodType: 'O+', quantity: 5, urgency: 'Alta' },
         { bloodType: 'A-', quantity: 2, urgency: 'Média' }
@@ -58,25 +82,55 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeModalBtn = document.getElementById('closeModalBtn');
 
     editBtn.addEventListener('click', function () {
-        editModal.style.display = 'flex'; // Certifique-se de que o modal seja exibido corretamente
+        editModal.style.display = 'flex'; // Exibe o modal de edição
     });
 
     closeModalBtn.addEventListener('click', function () {
-        editModal.style.display = 'none';
+        editModal.style.display = 'none'; // Fecha o modal
     });
 
-    // Fechar modais ao clicar fora do conteúdo
+    // Fechar modal ao clicar fora do conteúdo
     window.addEventListener('click', function (event) {
         if (event.target === editModal) {
             editModal.style.display = 'none';
         }
     });
 
-    // Evento para salvar as alterações do perfil
-    document.getElementById('editForm').addEventListener('submit', function (e) {
+    // Evento para salvar as alterações do perfil (futuramente implementar a lógica de atualização)
+    document.getElementById('editForm').addEventListener('submit', async function (e) {
         e.preventDefault();
-        // Ações para salvar as informações (substituir com a lógica de atualização na API)
-        alert('Informações do hospital atualizadas com sucesso!');
-        editModal.style.display = 'none';
+
+        // Dados do formulário de edição
+        const phone = document.getElementById('editPhone').value;
+        const address = document.getElementById('editAddress').value;
+        const specialties = document.getElementById('editSpecialties').value;
+
+        try {
+            // Requisição para atualizar as informações do hospital
+            const response = await fetch('http://localhost:5000/api/hospitals/update', {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ phone, address, specialties })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Informações atualizadas com sucesso!');
+                // Atualiza os dados na página
+                document.getElementById('phone').textContent = phone;
+                document.getElementById('address').textContent = address;
+                document.getElementById('specialties').textContent = specialties;
+                editModal.style.display = 'none'; // Fecha o modal
+            } else {
+                alert(`Erro: ${data.message}`);
+            }
+        } catch (error) {
+            console.error('Erro ao atualizar as informações:', error);
+            alert('Erro ao tentar atualizar as informações. Tente novamente mais tarde.');
+        }
     });
 });

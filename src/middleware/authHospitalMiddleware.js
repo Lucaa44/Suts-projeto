@@ -40,7 +40,7 @@ const protectHospital = async (req, res, next) => {
             next();
         } catch (error) {
             console.error('Erro ao verificar token:', error.message || error);
-            res.status(401).json({ message: 'Não autorizado, token falhou' });
+            res.status(401).json({ message: 'Não autorizado, token inválido' });
         }
     } else {
         res.status(401).json({ message: 'Não autorizado, sem token' });

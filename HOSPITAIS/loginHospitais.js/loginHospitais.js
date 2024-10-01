@@ -1,5 +1,3 @@
-// loginHospitais.js
-
 document.getElementById('hospitalLoginForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
