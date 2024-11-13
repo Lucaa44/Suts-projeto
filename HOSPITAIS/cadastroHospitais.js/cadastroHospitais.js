@@ -91,7 +91,7 @@ document.getElementById('hospitalForm').addEventListener('submit', async functio
 
         // Verifica se a resposta foi bem-sucedida
         if (response.ok) {
-            window.location.href = 'perfilHospital.html'; // Redirecionar para o perfil
+            window.location.href = 'loginHospitais.html'; // Redirecionar para o perfil
         } else {
             document.getElementById('emailError').textContent = `Erro: ${data.message}`;
             document.getElementById('emailError').style.display = 'block';

@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const hospitalRoutes = require('./routes/hospitalRoutes'); // Rotas para hospitais
+const vacancyRoutes = require('./routes/vagasRoutes');  // Rotas para vagas
 
 // Carrega as variáveis de ambiente
 dotenv.config();
@@ -20,7 +21,10 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 
 // Rotas para hospitais
-app.use('/api/hospitals', hospitalRoutes); 
+app.use('/api/hospitals', hospitalRoutes);
+
+// Rotas para vagas
+app.use('/api/vacancies', vacancyRoutes);
 
 // Rota de teste para verificar se o servidor está rodando
 app.get('/', (req, res) => {

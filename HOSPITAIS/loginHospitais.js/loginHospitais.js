@@ -48,6 +48,16 @@ document.getElementById('hospitalLoginForm').addEventListener('submit', async fu
             // Armazena o token do hospital no localStorage
             localStorage.setItem('hospitalToken', data.token);
 
+            // Armazena o hospitalId no localStorage (ajuste do nome para "id" que vem da resposta)
+            if (data.id) {
+                localStorage.setItem('hospitalId', data.id);
+            } else {
+                console.error('Erro: hospitalId (id) não retornado pela API.');
+                document.getElementById('cnpjError').textContent = 'Erro: Hospital ID não encontrado na resposta.';
+                document.getElementById('cnpjError').style.display = 'block';
+                return;
+            }
+
             // Redireciona para o perfil do hospital após o login
             window.location.href = 'perfilHospitais.html';
         } else {
