@@ -1,4 +1,4 @@
-// vagaController.js
+// controllers/vagaController.js
 
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
@@ -135,9 +135,28 @@ const closeVacancy = async (req, res) => {
   }
 };
 
+// Função para listar vagas públicas (abertas)
+const getPublicVacancies = async (req, res) => {
+  try {
+    const vacancies = await prisma.vacancy.findMany({
+      where: {
+        isClosed: false,
+      },
+      include: {
+        hospital: true, // Inclui informações do hospital
+      },
+    });
+    res.status(200).json(vacancies);
+  } catch (error) {
+    console.error('Erro ao listar vagas públicas:', error);
+    res.status(500).json({ error: 'Erro ao listar vagas públicas.' });
+  }
+};
+
 module.exports = {
   createVacancy,
   getVacancies,
   updateVacancy,
   closeVacancy,
+  getPublicVacancies,
 };

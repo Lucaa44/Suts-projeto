@@ -4,7 +4,7 @@ const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const hospitalRoutes = require('./routes/hospitalRoutes'); // Rotas para hospitais
 const vacancyRoutes = require('./routes/vagasRoutes');  // Rotas para vagas
-
+const status = require('./routes/RotaStatusInicio');
 // Carrega as variáveis de ambiente
 dotenv.config();
 console.log("JWT_SECRET:", process.env.JWT_SECRET);
@@ -25,6 +25,9 @@ app.use('/api/hospitals', hospitalRoutes);
 
 // Rotas para vagas
 app.use('/api/vacancies', vacancyRoutes);
+
+app.use('/api/stats', status);
+
 
 // Rota de teste para verificar se o servidor está rodando
 app.get('/', (req, res) => {

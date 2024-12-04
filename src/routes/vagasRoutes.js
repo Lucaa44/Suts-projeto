@@ -6,6 +6,7 @@ const {
   getVacancies,
   updateVacancy,
   closeVacancy,
+  getPublicVacancies,
 } = require('../controllers/vagaController');
 const { protectHospital } = require('../middleware/authHospitalMiddleware');
 
@@ -22,5 +23,8 @@ router.put('/update/:id', protectHospital, updateVacancy);
 
 // Rota para concluir uma vaga (protegida)
 router.put('/close/:id', protectHospital, closeVacancy);
+
+// Rota para listar vagas públicas (abertas)
+router.get('/public', getPublicVacancies);
 
 module.exports = router;

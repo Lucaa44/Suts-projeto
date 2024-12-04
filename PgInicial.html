@@ -16,84 +16,42 @@
     </header>
 
     <main>
-        <section class="carousel" aria-label="Carrossel de Hospitais">
+        <!-- Carrossel de Vagas -->
+        <section class="carousel" aria-label="Carrossel de Vagas">
             <button class="prev" aria-label="Anterior">&#10094;</button>
-
-            <article class="slide active">
-                <h2>Hospital Exemplo 1</h2>
-                <p><strong>Localização:</strong> Rua dos Exemplares, 123, Bairro Central</p>
-                <p><strong>Motivo:</strong> Urgente - Paciente em cirurgia</p>
-                <a href="PgDoador.html" class="donate-now">Doar agora!</a>
-                <button class="info-button" data-modal="modal1">Mais informações</button>
-            </article>
-
-            <article class="slide">
-                <h2>Hospital Central</h2>
-                <p><strong>Localização:</strong> Avenida dos Testes, 456, Zona Sul</p>
-                <p><strong>Motivo:</strong> Baixo estoque de sangue O+</p>
-                <a href="PgDoador.html" class="donate-now">Doar agora!</a>
-                <button class="info-button" data-modal="modal2">Mais informações</button>
-            </article>
-
-            <article class="slide">
-                <h2>Hospital Central</h2>
-                <p><strong>Localização:</strong> Avenida dos Testes, 456, Zona Sul</p>
-                <p><strong>Motivo:</strong> Baixo estoque de sangue O+</p>
-                <a href="PerfilDoador.html" class="donate-now">Doar agora!</a>
-                <button class="info-button" data-modal="modal3">Mais informações</button>
-            </article>
-
+            <!-- Os slides serão adicionados dinamicamente -->
             <button class="next" aria-label="Próximo">&#10095;</button>
         </section>
 
         <!-- Indicadores do Carrossel -->
         <div class="carousel-indicators">
-            <span class="indicator active" data-slide="0"></span>
-            <span class="indicator" data-slide="1"></span>
-            <span class="indicator" data-slide="2"></span>
+            <!-- Os indicadores serão adicionados dinamicamente -->
         </div>
 
-        <!-- Modais com informações detalhadas -->
-        <div id="modal1" class="info-modal" aria-hidden="true">
+        <!-- Modal de Detalhes da Vaga -->
+        <div id="vacancyModal" class="info-modal" aria-hidden="true">
             <div class="modal-content">
-                <span class="close" aria-label="Fechar">&times;</span>
-                <h2>Detalhes do Hospital Exemplo 1</h2>
-                <p>Informações detalhadas do Hospital Exemplo 1, incluindo detalhes sobre a pessoa que precisa de doação, seu tipo sanguíneo, etc.</p>
-            </div>
-        </div>
-
-        <div id="modal2" class="info-modal" aria-hidden="true">
-            <div class="modal-content">
-                <span class="close" aria-label="Fechar">&times;</span>
-                <h2>Detalhes do Hospital Exemplo 2</h2>
-                <p>Informações detalhadas do Hospital Exemplo 2, incluindo detalhes sobre a pessoa que precisa de doação, seu tipo sanguíneo, etc.</p>
-            </div>
-        </div>
-
-        <div id="modal3" class="info-modal" aria-hidden="true">
-            <div class="modal-content">
-                <span class="close" aria-label="Fechar">&times;</span>
-                <h2>Detalhes do Hospital Exemplo 3</h2>
-                <p>Informações detalhadas do Hospital Exemplo 3, incluindo detalhes sobre a pessoa que precisa de doação, seu tipo sanguíneo, etc.</p>
+                <!-- O conteúdo será preenchido dinamicamente -->
             </div>
         </div>
 
         <!-- Seção de Destaques -->
         <section class="highlights">
             <div class="highlight-item">
-                <h3>500+</h3>
+                <h3 id="donorsCount">0</h3>
                 <p>Doadores Cadastrados</p>
             </div>
             <div class="highlight-item">
-                <h3>300+</h3>
+                <h3 id="donationsCount">0</h3>
                 <p>Doações Realizadas</p>
             </div>
             <div class="highlight-item">
-                <h3>50+</h3>
+                <h3 id="hospitalsCount">0</h3>
                 <p>Hospitais Atendidos</p>
             </div>
         </section>
 
+        <!-- Restante do seu HTML permanece o mesmo -->
         <!-- Seção de Testemunhos -->
         <section class="testimonials">
             <h2>O que nossos doadores dizem</h2>
