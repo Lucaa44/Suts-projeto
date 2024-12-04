@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p><strong>Urgência:</strong> ${vacancy.urgency}</p>
                 <p><strong>Localização:</strong> ${vacancy.location || vacancy.hospital.address}</p>
                 <p><strong>Motivo:</strong> ${vacancy.description || 'Doação necessária'}</p>
-                <a href="PgDoador.html" class="donate-now">Doar agora!</a>
+                <button class="donate-now">Doar agora!</button>
                 <button class="info-button" data-vacancy='${JSON.stringify(vacancy)}'>Mais informações</button>
             `;
             carousel.insertBefore(slide, carousel.querySelector('.next'));
@@ -103,6 +103,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 openVacancyModal(vacancyData);
             });
         });
+
+        // Eventos para os botões "Doar agora!"
+        const donateButtons = document.querySelectorAll('.donate-now');
+        donateButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                openLoginModal();
+            });
+        });
+    }
+
+    // Função para abrir o modal de login
+    function openLoginModal() {
+        const loginModal = document.getElementById('loginModal');
+        if (loginModal) {
+            loginModal.style.display = 'flex';
+            loginModal.setAttribute('aria-hidden', 'false');
+        } else {
+            console.error('Modal de login não encontrado.');
+        }
     }
 
     // Função para abrir o modal com detalhes da vaga
@@ -132,9 +151,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Evento para fechar o modal ao clicar fora dele
     window.addEventListener('click', event => {
-        const modal = document.getElementById('vacancyModal');
-        if (event.target === modal) {
-            modal.style.display = 'none';
+        const vacancyModal = document.getElementById('vacancyModal');
+        const loginModal = document.getElementById('loginModal');
+        if (event.target === vacancyModal) {
+            vacancyModal.style.display = 'none';
+        }
+        if (event.target === loginModal) {
+            loginModal.style.display = 'none';
         }
     });
 
@@ -166,17 +189,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Carrega as estatísticas ao iniciar a página
     loadStats();
 
-    // ... restante do código existente ...
-
-    // Sempre mostrar o modal de login
+    // Manipulação do modal de login
     const accessProfileBtn = document.getElementById('accessProfileBtn');
     const loginModal = document.getElementById('loginModal');
     const loginForm = document.getElementById('loginForm');
 
     if (accessProfileBtn && loginModal && loginForm) {
         accessProfileBtn.addEventListener('click', function() {
-            loginModal.style.display = 'flex';
-            loginModal.setAttribute('aria-hidden', 'false');
+            openLoginModal();
         });
 
         loginModal.addEventListener('click', function(event) {
