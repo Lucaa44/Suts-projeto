@@ -1,4 +1,4 @@
-// gerenciamentoDeVagas.js
+// GerenciamentoVagas.js
 
 document.addEventListener('DOMContentLoaded', function() {
     const apiCreateUrl = 'http://localhost:5000/api/vacancies/create';
@@ -62,6 +62,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (event.target === addVacancyModal) {
             addVacancyModal.style.display = 'none';
         }
+        if (event.target === editVacancyModal) {
+            editVacancyModal.style.display = 'none';
+        }
     });
 
     // Lógica para salvar a nova vaga
@@ -117,18 +120,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Função para buscar vagas do backend e mostrar na página
-    async function fetchVacancies(filters = {}) {
+    async function fetchVacancies(filters = {}, isClosed = false) {
         let queryString = '';
 
-        if (filters.bloodType || filters.urgency) {
-            queryString = '?';
-            if (filters.bloodType) {
-                queryString += `bloodType=${filters.bloodType}&`;
-            }
-            if (filters.urgency) {
-                queryString += `urgency=${filters.urgency}`;
-            }
+        const params = new URLSearchParams();
+
+        if (filters.bloodType) {
+            params.append('bloodType', filters.bloodType);
         }
+
+        if (filters.urgency) {
+            params.append('urgency', filters.urgency);
+        }
+
+        params.append('isClosed', isClosed);
+
+        queryString = '?' + params.toString();
 
         try {
             const response = await fetch(apiFetchUrl + queryString, {
@@ -139,7 +146,11 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             if (response.ok) {
                 const vacancies = await response.json();
-                updateVacanciesList(vacancies);
+                if (isClosed) {
+                    updateClosedVacanciesList(vacancies);
+                } else {
+                    updateVacanciesList(vacancies);
+                }
             } else {
                 const errorData = await response.json();
                 console.error('Erro ao buscar vagas:', errorData.error || response.statusText);
@@ -151,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Função para atualizar a lista de vagas na página
     function updateVacanciesList(vacancies) {
-        const vacanciesList = document.querySelector('.vacancies-list');
+        const vacanciesList = document.querySelector('#manageVacanciesList');
         if (vacanciesList) {
             vacanciesList.innerHTML = ''; // Limpa a lista atual
 
@@ -161,31 +172,84 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             vacancies.forEach(vacancy => {
+                if (vacancy.isClosed) return; // Ignora vagas fechadas nesta lista
+
                 const vacancyItem = document.createElement('div');
                 vacancyItem.classList.add('vacancy-item');
                 vacancyItem.innerHTML = `
-                    <p><strong>Tipo Sanguíneo:</strong> ${vacancy.bloodType}</p>
-                    <p><strong>Quantidade Necessária:</strong> ${vacancy.quantity}</p>
-                    <p><strong>Urgência:</strong> ${vacancy.urgency}</p>
-                    <p><strong>Data Limite:</strong> ${new Date(vacancy.deadline).toLocaleDateString()}</p>
-                    <p><strong>Descrição:</strong> ${vacancy.description}</p>
-                    <p><strong>Local da Coleta:</strong> ${vacancy.location}</p>
-                    <p><strong>Contato:</strong> ${vacancy.contact}</p>
+                    <div class="vacancy-item-header">
+                        <h3>${vacancy.bloodType}</h3>
+                        <p><strong>Urgência:</strong> ${vacancy.urgency}</p>
+                    </div>
+                    <div class="vacancy-item-details">
+                        <p><strong>Quantidade Necessária:</strong> ${vacancy.quantity}</p>
+                        <p><strong>Data Limite:</strong> ${new Date(vacancy.deadline).toLocaleDateString()}</p>
+                        <p><strong>Descrição:</strong> ${vacancy.description || 'N/A'}</p>
+                        <p><strong>Local da Coleta:</strong> ${vacancy.location || 'N/A'}</p>
+                        <p><strong>Contato:</strong> ${vacancy.contact || 'N/A'}</p>
+                    </div>
+                    <button class="edit-vacancy-btn" data-id="${vacancy.id}">Editar</button>
+                    <button class="close-vacancy-btn" data-id="${vacancy.id}">Concluir</button>
                 `;
                 vacanciesList.appendChild(vacancyItem);
+
+                // Adiciona eventos aos botões
+                vacancyItem.querySelector('.edit-vacancy-btn').addEventListener('click', function() {
+                    openEditVacancyModal(vacancy);
+                });
+
+                vacancyItem.querySelector('.close-vacancy-btn').addEventListener('click', function() {
+                    closeVacancy(vacancy.id);
+                });
             });
         } else {
             console.error("Erro: Lista de vagas não encontrada.");
         }
     }
 
-    // Evento para aplicar filtros
+    // Função para atualizar a lista de vagas concluídas
+    function updateClosedVacanciesList(vacancies) {
+        const closedVacanciesList = document.querySelector('.closed-vacancies-list');
+        if (closedVacanciesList) {
+            closedVacanciesList.innerHTML = ''; // Limpa a lista atual
+
+            if (vacancies.length === 0) {
+                closedVacanciesList.innerHTML = '<p>Nenhuma vaga concluída encontrada.</p>';
+                return;
+            }
+
+            vacancies.forEach(vacancy => {
+                if (!vacancy.isClosed) return; // Ignora vagas abertas nesta lista
+
+                const vacancyItem = document.createElement('div');
+                vacancyItem.classList.add('vacancy-item');
+                vacancyItem.innerHTML = `
+                    <div class="vacancy-item-header">
+                        <h3>${vacancy.bloodType}</h3>
+                        <p><strong>Urgência:</strong> ${vacancy.urgency}</p>
+                    </div>
+                    <div class="vacancy-item-details">
+                        <p><strong>Quantidade Necessária:</strong> ${vacancy.quantity}</p>
+                        <p><strong>Data Limite:</strong> ${new Date(vacancy.deadline).toLocaleDateString()}</p>
+                        <p><strong>Descrição:</strong> ${vacancy.description || 'N/A'}</p>
+                        <p><strong>Local da Coleta:</strong> ${vacancy.location || 'N/A'}</p>
+                        <p><strong>Contato:</strong> ${vacancy.contact || 'N/A'}</p>
+                    </div>
+                `;
+                closedVacanciesList.appendChild(vacancyItem);
+            });
+        } else {
+            console.error("Erro: Lista de vagas concluídas não encontrada.");
+        }
+    }
+
+    // Função para aplicar filtros
     const applyFiltersBtn = document.getElementById('applyFiltersBtn');
 
     if (applyFiltersBtn) {
         applyFiltersBtn.addEventListener('click', function() {
-            const bloodTypeFilter = document.getElementById('bloodTypeFilter')?.value;
-            const urgencyFilter = document.getElementById('urgencyFilter')?.value;
+            const bloodTypeFilter = document.getElementById('bloodTypeFilter')?.value || '';
+            const urgencyFilter = document.getElementById('urgencyFilter')?.value || '';
 
             fetchVacancies({
                 bloodType: bloodTypeFilter,
@@ -196,8 +260,122 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Erro: Botão de aplicar filtros não encontrado.');
     }
 
+    // Função para abrir o modal de edição
+    function openEditVacancyModal(vacancy) {
+        const editModal = document.getElementById('editVacancyModal');
+
+        if (editModal) {
+            // Preenche os campos do formulário com os dados da vaga
+            document.getElementById('editBloodType').value = vacancy.bloodType;
+            document.getElementById('editQuantity').value = vacancy.quantity;
+            document.getElementById('editUrgency').value = vacancy.urgency;
+            document.getElementById('editDeadline').value = new Date(vacancy.deadline).toISOString().split('T')[0];
+            document.getElementById('editDescription').value = vacancy.description;
+            document.getElementById('editLocation').value = vacancy.location;
+            document.getElementById('editContact').value = vacancy.contact;
+            document.getElementById('editVacancyId').value = vacancy.id; // Campo oculto para armazenar o ID
+
+            editModal.style.display = 'flex';
+        } else {
+            console.error('Erro: Modal de editar vaga não encontrado.');
+        }
+    }
+
+    // Selecionando elementos para o modal de editar vaga
+    const editVacancyModal = document.getElementById('editVacancyModal');
+    const closeEditVacancyModalBtn = document.getElementById('closeEditVacancyModalBtn');
+
+    if (closeEditVacancyModalBtn) {
+        closeEditVacancyModalBtn.addEventListener('click', function() {
+            if (editVacancyModal) {
+                editVacancyModal.style.display = 'none';
+            }
+        });
+    } else {
+        console.error('Erro: Botão de fechar modal de edição não encontrado.');
+    }
+
+    // Lógica para salvar as alterações da vaga
+    const editVacancyForm = document.getElementById('editVacancyForm');
+    if (editVacancyForm) {
+        editVacancyForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const vacancyId = document.getElementById('editVacancyId').value;
+            const bloodType = document.getElementById('editBloodType').value;
+            const quantity = parseInt(document.getElementById('editQuantity').value);
+            const urgency = document.getElementById('editUrgency').value;
+            const deadline = document.getElementById('editDeadline').value;
+            const description = document.getElementById('editDescription').value;
+            const location = document.getElementById('editLocation').value;
+            const contact = document.getElementById('editContact').value;
+
+            const updatedVacancy = {
+                bloodType,
+                quantity,
+                urgency,
+                deadline,
+                description,
+                location,
+                contact
+            };
+
+            try {
+                const response = await fetch(`http://localhost:5000/api/vacancies/update/${vacancyId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(updatedVacancy)
+                });
+
+                if (response.ok) {
+                    alert('Vaga atualizada com sucesso!');
+                    if (editVacancyModal) editVacancyModal.style.display = 'none';
+                    editVacancyForm.reset();
+                    fetchVacancies();
+                } else {
+                    const errorData = await response.json();
+                    console.error('Erro ao atualizar a vaga:', errorData.error || response.statusText);
+                }
+            } catch (error) {
+                console.error('Erro ao conectar com o servidor:', error);
+            }
+        });
+    } else {
+        console.error('Erro: Formulário de edição de vaga não encontrado.');
+    }
+
+    // Função para concluir uma vaga
+    async function closeVacancy(vacancyId) {
+        if (confirm('Deseja realmente concluir esta vaga?')) {
+            try {
+                const response = await fetch(`http://localhost:5000/api/vacancies/close/${vacancyId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    alert('Vaga concluída com sucesso!');
+                    fetchVacancies();
+                    fetchVacancies({}, true);
+                } else {
+                    const errorData = await response.json();
+                    console.error('Erro ao concluir a vaga:', errorData.error || response.statusText);
+                }
+            } catch (error) {
+                console.error('Erro ao conectar com o servidor:', error);
+            }
+        }
+    }
+
     // Buscar e mostrar as vagas ao carregar a página
     fetchVacancies();
+    fetchVacancies({}, true); // Buscar vagas concluídas
 
     // Mostra a primeira aba ao carregar a página
     showTab('manageVacancies');

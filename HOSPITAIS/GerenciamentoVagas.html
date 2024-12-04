@@ -2,13 +2,12 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciamento do Hospital</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Verifique se os caminhos para CSS estão corretos -->
+    <!-- Estilos CSS -->
     <link rel="stylesheet" href="cssGerenciamentoVagas/GerenciamentoVagas.css">
     <link rel="stylesheet" href="cssGerenciamentoVagas/modal.css">
-    <!-- Verifique se o caminho para o script está correto -->
+    <!-- Script JavaScript -->
     <script src="GerenciamentoVaga.js/GerenciamentoVagas.js" defer></script>
 </head>
 <body>
@@ -20,8 +19,7 @@
         <!-- Abas de Navegação -->
         <div class="tabs">
             <button class="tab-button active" onclick="showTab('manageVacancies')">Gerenciar Vagas</button>
-            <button class="tab-button" onclick="showTab('donationHistory')">Histórico de Vagas</button>
-            <button class="tab-button" onclick="showTab('editInfo')">Editar Vagas</button>
+            <button class="tab-button" onclick="showTab('closedVacancies')">Histórico de Vagas</button>
         </div>
 
         <!-- Conteúdo das Abas -->
@@ -59,7 +57,7 @@
             <button id="addVacancyBtn" class="cta-button">Adicionar Nova Vaga</button>
         </section>
 
-       <!-- Modal para Adicionar Nova Vaga -->
+        <!-- Modal para Adicionar Nova Vaga -->
         <div id="addVacancyModal" class="modal">
             <div class="modal-content">
                 <span id="closeVacancyModalBtn" class="close">&times;</span>
@@ -117,20 +115,71 @@
         </div>
 
         <!-- Histórico de Vagas -->
-        <section id="donationHistory" class="tab-content">
+        <section id="closedVacancies" class="tab-content">
             <h2>Histórico de Vagas</h2>
-            <div class="donation-history">
-                <p>Carregando histórico de vagas...</p> <!-- Placeholder -->
+            <div class="closed-vacancies-list">
+                <p>Carregando histórico de vagas...</p>
             </div>
         </section>
 
-        <!-- Editar Vagas -->
-        <section id="editInfo" class="tab-content">
-            <h2>Editar Vagas</h2>
-            <div class="vacancies-list" id="editVacanciesList">
-                <!-- Lista de Vagas Editáveis será preenchida via JavaScript -->
+        <!-- Modal para Editar Vaga -->
+        <div id="editVacancyModal" class="modal">
+            <div class="modal-content">
+                <span id="closeEditVacancyModalBtn" class="close">&times;</span>
+                <h2>Editar Vaga</h2>
+                <form id="editVacancyForm">
+                    <input type="hidden" id="editVacancyId">
+                    <!-- Campos do formulário de edição -->
+                    <div class="form-group">
+                        <label for="editBloodType">Tipo Sanguíneo:</label>
+                        <select id="editBloodType" name="bloodType" required>
+                            <option value="">Selecione</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editQuantity">Quantidade Necessária:</label>
+                        <input type="number" id="editQuantity" name="quantity" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editUrgency">Urgência:</label>
+                        <select id="editUrgency" name="urgency" required>
+                            <option value="">Selecione</option>
+                            <option value="Baixa">Baixa</option>
+                            <option value="Média">Média</option>
+                            <option value="Alta">Alta</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDeadline">Data Limite:</label>
+                        <input type="date" id="editDeadline" name="deadline" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDescription">Descrição:</label>
+                        <textarea id="editDescription" name="description" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editLocation">Local da Coleta:</label>
+                        <input type="text" id="editLocation" name="location">
+                    </div>
+                    <div class="form-group">
+                        <label for="editContact">Contato para Dúvidas:</label>
+                        <input type="text" id="editContact" name="contact">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Salvar Alterações">
+                    </div>
+                </form>
             </div>
-        </section>
+        </div>
+
     </main>
 
     <footer>

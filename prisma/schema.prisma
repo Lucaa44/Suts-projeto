@@ -51,6 +51,7 @@ model Vacancy {
   updatedAt   DateTime @updatedAt
   hospitalId  Int
   hospital    Hospital @relation(fields: [hospitalId], references: [id])
+  isClosed    Boolean   @default(false)
 }
 
 
