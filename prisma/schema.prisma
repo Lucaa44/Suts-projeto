@@ -14,45 +14,94 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  cpf       String   @unique @default("")  // Valor padrão vazio
-  password  String
-  bloodType String   @default("Unknown")   // Valor padrão "Unknown"
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               Int               @id @default(autoincrement())
+  name             String
+  email            String            @unique
+  cpf              String            @unique @default("")
+  password         String
+  bloodType        String            @default("Unknown")
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  pendingDonations PendingDonation[] // Relação com PendingDonation
+  donations        Donation[]        // Relação com Donation
+  userBadges       UserBadge[]       // Relação com UserBadge
+  notifications    Notification[]    // Relação com Notification
 }
 
-
-
 model Hospital {
-  id         Int      @id @default(autoincrement())
-  cnpj       String      @unique
-  name       String
-  email      String   @unique
-  phone      String
-  address    String
+  id          Int       @id @default(autoincrement())
+  cnpj        String    @unique
+  name        String
+  email       String    @unique
+  phone       String
+  address     String
   specialties String
-  password      String
-  vacancies  Vacancy[]
+  password    String
+  vacancies   Vacancy[]
 }
 
 model Vacancy {
-  id          Int      @id @default(autoincrement())
-  bloodType   String
-  quantity    Int
-  urgency     String
-  deadline    DateTime
-  description String
-  location    String
-  contact     String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  hospitalId  Int
-  hospital    Hospital @relation(fields: [hospitalId], references: [id])
-  isClosed    Boolean   @default(false)
+  id               Int               @id @default(autoincrement())
+  bloodType        String
+  quantity         Int
+  urgency          String
+  deadline         DateTime
+  description      String
+  location         String
+  contact          String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  hospitalId       Int
+  hospital         Hospital          @relation(fields: [hospitalId], references: [id])
+  isClosed         Boolean           @default(false)
+  pendingDonations PendingDonation[] // Relação com PendingDonation
+  donations        Donation[]        // Relação com Donation
 }
 
+model PendingDonation {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  vacancy   Vacancy  @relation(fields: [vacancyId], references: [id])
+  vacancyId Int
+  status    String
+  createdAt DateTime @default(now())
+}
 
+model Donation {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  vacancy   Vacancy  @relation(fields: [vacancyId], references: [id])
+  vacancyId Int
+  status    String
+  createdAt DateTime @default(now())
+}
 
+model Badge {
+  id          Int        @id @default(autoincrement())
+  name        String
+  imageUrl    String
+  description String?
+  criteria    Int        // Número mínimo de doações para conquistar a insígnia
+  userBadges  UserBadge[]
+}
+
+model UserBadge {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  badge     Badge    @relation(fields: [badgeId], references: [id])
+  badgeId   Int
+  earnedAt  DateTime @default(now())
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

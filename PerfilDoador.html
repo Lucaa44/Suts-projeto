@@ -20,35 +20,88 @@
             <img src="../images/profile-picture.png" alt="Foto do Perfil" class="profile-picture">
             <div class="profile-info">
                 <h2 id="userName"></h2> <!-- Será preenchido com o nome do usuário -->
-                <p><strong>Tipo Sanguíneo:</strong> <span id="userBloodType"></span></p> <!-- Preencher com o tipo sanguíneo -->
-                <p><strong>Email:</strong> <span id="userEmail"></span></p> <!-- Preencher com o email -->
-                <p><strong>CPF:</strong> <span id="userCPF"></span></p> <!-- Preencher com o CPF -->
+                <p><strong>Tipo Sanguíneo:</strong> <span id="userBloodType"></span></p>
+                <p><strong>Email:</strong> <span id="userEmail"></span></p>
+                <p><strong>CPF:</strong> <span id="userCPF"></span></p>
             </div>
         </section>
 
         <!-- Abas de Navegação -->
         <div class="tabs">
-            <button class="tab-button active" onclick="showTab('infoPersonais')">Informações Pessoais</button>
-            <button class="tab-button" onclick="showTab('doacoes')">Histórico de Doações</button>
-            <button class="tab-button" onclick="showTab('pendencias')">Pendências</button>
-            <button class="tab-button" onclick="showTab('recompensas')">Insígnias</button>
-            <button class="tab-button" onclick="showTab('notificacoes')">Notificações</button>
+            <button class="tab-button active" data-tab="infoPersonais">Informações Pessoais</button>
+            <button class="tab-button" data-tab="doacoes">Histórico de Doações</button>
+            <button class="tab-button" data-tab="pendencias">Pendências</button>
+            <button class="tab-button" data-tab="recompensas">Insígnias</button>
+            <button class="tab-button" data-tab="notificacoes">Notificações</button>
         </div>
 
         <!-- Conteúdo das Abas -->
+        <!-- Informações Pessoais -->
         <section id="infoPersonais" class="tab-content">
             <h2>Informações Pessoais</h2>
-            <p><strong>Nome Completo:</strong> <span id="userNamePersonal"></span></p> <!-- Preencher com o nome -->
-            <p><strong>Tipo Sanguíneo:</strong> <span id="userBloodTypePersonal"></span></p> <!-- Preencher com o tipo sanguíneo -->
-            <p><strong>Informações de Contato:</strong> <span id="userEmailPersonal"></span></p> <!-- Preencher com o email -->
-            <p><strong>CPF:</strong> <span id="userCPFPersonal"></span></p> <!-- Preencher com o CPF -->
-            <section id="edit-profile">
-                <button class="edit-button">Editar Perfil</button>
-            </section>
+            <p><strong>Nome Completo:</strong> <span id="userNamePersonal"></span></p>
+            <p><strong>Tipo Sanguíneo:</strong> <span id="userBloodTypePersonal"></span></p>
+            <p><strong>Informações de Contato:</strong> <span id="userEmailPersonal"></span></p>
+            <p><strong>CPF:</strong> <span id="userCPFPersonal"></span></p>
+            <button id="editProfileButton" class="edit-button">Editar Perfil</button>
         </section>
 
-        <!-- Outras seções como Histórico de Doações, Pendências, etc. -->
-        <!-- Essas seções não precisam de alterações imediatas, pois elas exibem dados específicos e podem ser gerenciadas separadamente -->
+        <!-- Histórico de Doações -->
+        <section id="doacoes" class="tab-content" style="display: none;">
+            <h2>Histórico de Doações</h2>
+            <table class="donation-history">
+                <thead>
+                    <tr>
+                        <th>Hospital</th>
+                        <th>Tipo Sanguíneo</th>
+                        <th>Urgência</th>
+                        <th>Status</th>
+                        <th>Data da Doação</th>
+                    </tr>
+                </thead>
+                <tbody id="donationHistory">
+                    <!-- Histórico de doações será carregado aqui -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Pendências -->
+        <section id="pendencias" class="tab-content" style="display: none;">
+            <h2>Pendências</h2>
+            <div id="pendingsList">
+                <!-- As pendências serão carregadas aqui -->
+            </div>
+        </section>
+
+        <!-- Insígnias -->
+        <section id="recompensas" class="tab-content" style="display: none;">
+            <h2>Insígnias</h2>
+            <div id="badgesList">
+                <!-- Insígnias serão carregadas aqui -->
+            </div>
+        </section>
+
+        <!-- Notificações -->
+        <section id="notificacoes" class="tab-content" style="display: none;">
+            <h2>Notificações</h2>
+            <div id="notificationsList">
+                <!-- Notificações serão carregadas aqui -->
+            </div>
+        </section>
+
+        <!-- Modal de Edição de Perfil -->
+        <div id="editProfileModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Editar Perfil</h2>
+                <form id="editProfileForm">
+                    <label for="editEmail">Email:</label>
+                    <input type="email" id="editEmail" name="editEmail" required>
+                    <!-- Outros campos se necessário -->
+                    <button type="submit">Salvar</button>
+                </form>
+            </div>
+        </div>
 
         <a href="PgInicial.html">
             <button class="cta-button">Voltar</button>

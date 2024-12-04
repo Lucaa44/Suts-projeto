@@ -1,3 +1,5 @@
+// controllers/userController.js
+
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const bcrypt = require('bcryptjs');
@@ -33,7 +35,6 @@ const registerUser = async (req, res) => {
                 cpf,
                 password: hashedPassword,
                 bloodType
-                
             }
         });
 
@@ -58,7 +59,7 @@ const registerUser = async (req, res) => {
 
 // Login do usuário
 const loginUser = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, vacancyId } = req.body;
 
     try {
         const user = await prisma.user.findUnique({
@@ -70,6 +71,29 @@ const loginUser = async (req, res) => {
             const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
                 expiresIn: '30d'
             });
+
+            // Se vacancyId estiver presente, criar uma pendência
+            if (vacancyId) {
+                // Verifica se a pendência já existe
+                const existingPending = await prisma.pendingDonation.findFirst({
+                    where: {
+                        userId: user.id,
+                        vacancyId: parseInt(vacancyId),
+                        status: 'pendente'
+                    }
+                });
+
+                if (!existingPending) {
+                    await prisma.pendingDonation.create({
+                        data: {
+                            userId: user.id,
+                            vacancyId: parseInt(vacancyId),
+                            status: 'pendente',
+                            createdAt: new Date()
+                        }
+                    });
+                }
+            }
 
             res.json({
                 id: user.id,
@@ -110,8 +134,132 @@ const getUserProfile = async (req, res) => {
     }
 };
 
+// Atualiza o perfil do usuário
+const updateUserProfile = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const userId = req.user.id;
+
+        // Atualiza o usuário
+        const updatedUser = await prisma.user.update({
+            where: { id: userId },
+            data: {
+                email,
+                // Outros campos se necessário
+            },
+        });
+
+        res.json({
+            id: updatedUser.id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            cpf: updatedUser.cpf,
+            bloodType: updatedUser.bloodType,
+        });
+    } catch (error) {
+        console.error('Erro ao atualizar perfil do usuário:', error);
+        res.status(500).json({ message: 'Erro ao atualizar perfil do usuário' });
+    }
+};
+
+// Obtém as pendências do usuário
+const getUserPendings = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const pendings = await prisma.pendingDonation.findMany({
+            where: { userId },
+            include: {
+                vacancy: {
+                    include: {
+                        hospital: true,
+                    },
+                },
+            },
+        });
+
+        res.json(pendings);
+    } catch (error) {
+        console.error('Erro ao obter pendências do usuário:', error);
+        res.status(500).json({ error: 'Erro ao obter pendências do usuário' });
+    }
+};
+
+// Obtém o histórico de doações do usuário
+const getDonationHistory = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const donations = await prisma.donation.findMany({
+            where: { userId },
+            include: {
+                vacancy: {
+                    include: {
+                        hospital: true,
+                    },
+                },
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
+
+        res.json(donations);
+    } catch (error) {
+        console.error('Erro ao obter histórico de doações:', error);
+        res.status(500).json({ message: 'Erro ao obter histórico de doações' });
+    }
+};
+
+// Obtém as insígnias do usuário
+const getUserBadges = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const userBadges = await prisma.userBadge.findMany({
+            where: { userId },
+            include: {
+                badge: true,
+            },
+            orderBy: {
+                earnedAt: 'desc',
+            },
+        });
+
+        res.json(userBadges);
+    } catch (error) {
+        console.error('Erro ao obter insígnias do usuário:', error);
+        res.status(500).json({ message: 'Erro ao obter insígnias do usuário' });
+    }
+};
+
+// Obtém as notificações do usuário
+const getUserNotifications = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const notifications = await prisma.notification.findMany({
+            where: { userId },
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
+
+        res.json(notifications);
+    } catch (error) {
+        console.error('Erro ao obter notificações do usuário:', error);
+        res.status(500).json({ message: 'Erro ao obter notificações do usuário' });
+    }
+};
+
 module.exports = {
     registerUser,
     loginUser,
-    getUserProfile
+    getUserProfile,
+    updateUserProfile,
+    getUserPendings,
+    getDonationHistory,
+    getUserBadges,
+    getUserNotifications
 };

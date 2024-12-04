@@ -1,4 +1,4 @@
-/* Estrutura.css */
+/* PerfilDoador.css */
 
 /* Reset básico */
 * {
@@ -141,8 +141,14 @@ main {
     margin-bottom: 10px;
 }
 
-.conclude-button {
-    background-color: #1e90ff;
+.pendency p {
+    margin-bottom: 5px;
+    color: #333;
+}
+
+/* Botão de Editar Perfil */
+.edit-button {
+    background-color: #ffa500; /* Laranja */
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -150,10 +156,55 @@ main {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
+    margin-top: 20px;
+    display: block;
+    text-align: center;
+    width: 100%;
+    max-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.conclude-button:hover {
-    background-color: #1c7ed6;
+.edit-button:hover {
+    background-color: #e69500; /* Laranja mais escuro no hover */
+}
+
+/* Modal de Edição de Perfil */
+.modal {
+    display: none; /* Escondido por padrão */
+    position: fixed; /* Fica em cima da página */
+    z-index: 1; /* Fica na frente de outros elementos */
+    left: 0;
+    top: 0;
+    width: 100%; /* Largura total */
+    height: 100%; /* Altura total */
+    overflow: auto; /* Habilita o scroll se necessário */
+    background-color: rgba(0, 0, 0, 0.4); /* Fundo preto com opacidade */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; /* Centraliza verticalmente */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Largura do modal */
+    max-width: 500px; /* Largura máxima */
+    border-radius: 8px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 /* Botão de Voltar */
@@ -202,7 +253,7 @@ main {
 }
 
 /* Insígnias */
-#recompensas {
+#badgesList {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
@@ -241,61 +292,30 @@ main {
     color: #1e90ff;
 }
 
-/* Botão de Editar Perfil */
-.edit-button {
-    background-color: #ffa500; /* Laranja */
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-    margin-top: 20px;
-    display: block;
-    text-align: center;
-    width: 100%;
-    max-width: 200px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.edit-button:hover {
-    background-color: #e69500; /* Laranja mais escuro no hover */
-}
-
-/* Botão de Agendar Nova Doação */
-.schedule-button {
-    background-color: #1e90ff;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-    margin-top: 20px;
-    display: block;
-    text-align: center;
-    width: 100%;
-    max-width: 200px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.schedule-button:hover {
-    background-color: #1c7ed6;
-}
-
-/* Rodapé */
+/* Footer */
 footer {
-    background-color: #1e90ff;
-    color: #fff;
+    background-color: #007bff; /* Azul forte */
+    color: white;
     text-align: center;
-    padding: 15px 0;
-    margin-top: auto;
-    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 0 0 8px 8px;
+    padding: 20px;
+    margin-top: auto; /* Empurra o footer para o fim da página */
+    border-radius: 0 0 10px 10px; /* Cantos arredondados no rodapé */
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1); /* Sombra superior */
+}
+
+footer p {
+    margin: 0;
+    font-size: 16px;
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+footer a:hover {
+    text-decoration: underline;
 }
 
 /* Responsividade */
@@ -322,5 +342,14 @@ footer {
     .tab-button {
         border-radius: 8px;
         margin-bottom: 5px;
+    }
+
+    .donation-history th, .donation-history td {
+        padding: 8px;
+    }
+
+    .badge-image {
+        width: 80px;
+        height: 80px;
     }
 }

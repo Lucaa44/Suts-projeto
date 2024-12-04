@@ -1,12 +1,15 @@
 // PgInicial.js
 
 document.addEventListener('DOMContentLoaded', function() {
+    let selectedVacancyId = null;
+    let vacancies = []; // Armazena as vagas carregadas
+
     // Função para carregar as vagas e atualizar o carrossel
     async function loadVacancies() {
         try {
             const response = await fetch('http://localhost:5000/api/vacancies/public');
             if (response.ok) {
-                const vacancies = await response.json();
+                vacancies = await response.json(); // Armazena as vagas
                 updateCarousel(vacancies);
             } else {
                 console.error('Erro ao buscar vagas:', response.statusText);
@@ -49,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p><strong>Urgência:</strong> ${vacancy.urgency}</p>
                 <p><strong>Localização:</strong> ${vacancy.location || vacancy.hospital.address}</p>
                 <p><strong>Motivo:</strong> ${vacancy.description || 'Doação necessária'}</p>
-                <button class="donate-now">Doar agora!</button>
+                <button class="donate-now" data-vacancy-id="${vacancy.id}">Doar agora!</button>
                 <button class="info-button" data-vacancy='${JSON.stringify(vacancy)}'>Mais informações</button>
             `;
             carousel.insertBefore(slide, carousel.querySelector('.next'));
@@ -108,6 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const donateButtons = document.querySelectorAll('.donate-now');
         donateButtons.forEach(button => {
             button.addEventListener('click', () => {
+                selectedVacancyId = button.getAttribute('data-vacancy-id'); // Armazena o ID da vaga selecionada
                 openLoginModal();
             });
         });
@@ -196,6 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (accessProfileBtn && loginModal && loginForm) {
         accessProfileBtn.addEventListener('click', function() {
+            selectedVacancyId = null; // Limpa a seleção de vaga se o usuário clicar para acessar o perfil
             openLoginModal();
         });
 
@@ -214,12 +219,17 @@ document.addEventListener('DOMContentLoaded', function() {
             const password = document.getElementById('password').value;
 
             try {
+                const body = { email, password };
+                if (selectedVacancyId) {
+                    body.vacancyId = selectedVacancyId; // Envia o vacancyId se houver uma vaga selecionada
+                }
+
                 const response = await fetch('http://localhost:5000/api/users/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ email, password })
+                    body: JSON.stringify(body)
                 });
 
                 const data = await response.json();
@@ -230,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert('Login realizado com sucesso!');
                     window.location.href = 'PerfilDoador.html'; // Redireciona para o perfil do doador após o login
                 } else {
-                    alert(`Erro: ${data.error || 'Não foi possível fazer o login.'}`);
+                    alert(`Erro: ${data.message || 'Não foi possível fazer o login.'}`);
                 }
             } catch (error) {
                 console.error('Erro ao fazer login:', error);
