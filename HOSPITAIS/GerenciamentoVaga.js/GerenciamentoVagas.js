@@ -25,13 +25,22 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error(`Erro: Elemento com ID ${tabId} não encontrado.`);
         }
 
-        const buttonElement = document.querySelector(`.tab-button[onclick="showTab('${tabId}')"]`);
+        const buttonElement = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
         if (buttonElement) {
             buttonElement.classList.add('active');
         } else {
-            console.error(`Erro: Botão com onclick para ${tabId} não encontrado.`);
+            console.error(`Erro: Botão com data-tab="${tabId}" não encontrado.`);
         }
     }
+
+    // Adiciona eventos aos botões das abas
+    const tabButtons = document.querySelectorAll('.tab-button');
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const tabId = this.getAttribute('data-tab');
+            showTab(tabId);
+        });
+    });
 
     // Selecionando elementos para o modal de adicionar vaga
     const addVacancyModal = document.getElementById('addVacancyModal');

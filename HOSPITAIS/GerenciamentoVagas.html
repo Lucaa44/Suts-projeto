@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Gerenciamento do Hospital</title>
+    <!-- Links de estilos CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Estilos CSS -->
     <link rel="stylesheet" href="cssGerenciamentoVagas/GerenciamentoVagas.css">
     <link rel="stylesheet" href="cssGerenciamentoVagas/modal.css">
     <!-- Script JavaScript -->
@@ -12,14 +12,14 @@
 </head>
 <body>
     <header>
-        <h1>Gerenciamento do Hospital</h1>
+        <h1>Gerenciamento das Suas Vagas</h1>
     </header>
 
     <main>
         <!-- Abas de Navegação -->
         <div class="tabs">
-            <button class="tab-button active" onclick="showTab('manageVacancies')">Gerenciar Vagas</button>
-            <button class="tab-button" onclick="showTab('closedVacancies')">Histórico de Vagas</button>
+            <button class="tab-button active" data-tab="manageVacancies">Gerenciar Vagas</button>
+            <button class="tab-button" data-tab="closedVacancies">Histórico de Vagas</button>
         </div>
 
         <!-- Conteúdo das Abas -->
