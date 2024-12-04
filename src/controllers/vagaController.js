@@ -6,10 +6,11 @@ const prisma = new PrismaClient();
 // Função para criar uma nova vaga
 const createVacancy = async (req, res) => {
   try {
-    const { bloodType, quantity, urgency, deadline, description, location, contact, hospitalId } = req.body;
+    const { bloodType, quantity, urgency, deadline, description, location, contact } = req.body;
+    const hospitalId = req.hospital.id; // Usa o hospitalId do hospital autenticado
 
     // Certifique-se de que todos os campos obrigatórios estão presentes
-    if (!bloodType || !quantity || !urgency || !deadline || !hospitalId) {
+    if (!bloodType || !quantity || !urgency || !deadline) {
       return res.status(400).json({ error: 'Todos os campos obrigatórios devem ser preenchidos.' });
     }
 
@@ -22,24 +23,30 @@ const createVacancy = async (req, res) => {
         description,
         location,
         contact,
-        hospitalId: parseInt(hospitalId, 10), // Converte para número para garantir compatibilidade
+        hospitalId: hospitalId, // Usa o hospitalId do hospital autenticado
       },
     });
 
     res.status(201).json({ message: 'Vaga criada com sucesso!', vacancy: newVacancy });
   } catch (error) {
-    console.error('Erro ao criar vaga:', error); // Adiciona um log do erro para melhor depuração
+    console.error('Erro ao criar vaga:', error);
     res.status(500).json({ error: 'Erro ao criar vaga.' });
   }
 };
 
-// Função para listar todas as vagas
+// Função para listar as vagas do hospital logado
 const getVacancies = async (req, res) => {
   try {
-    const vacancies = await prisma.vacancy.findMany();
+    const hospitalId = req.hospital.id; // Obtém o hospitalId do middleware de autenticação
+
+    const vacancies = await prisma.vacancy.findMany({
+      where: {
+        hospitalId: hospitalId,
+      },
+    });
     res.status(200).json(vacancies);
   } catch (error) {
-    console.error('Erro ao listar vagas:', error); // Adiciona um log do erro para melhor depuração
+    console.error('Erro ao listar vagas:', error);
     res.status(500).json({ error: 'Erro ao listar vagas.' });
   }
 };
@@ -49,10 +56,20 @@ const updateVacancy = async (req, res) => {
   try {
     const { id } = req.params;
     const { bloodType, quantity, urgency, deadline, description, location, contact } = req.body;
+    const hospitalId = req.hospital.id; // Usa o hospitalId do hospital autenticado
 
     // Validações dos campos obrigatórios
     if (!id || !bloodType || !quantity || !urgency || !deadline) {
       return res.status(400).json({ error: 'Campos obrigatórios faltando.' });
+    }
+
+    // Verifica se a vaga pertence ao hospital autenticado
+    const vacancy = await prisma.vacancy.findUnique({
+      where: { id: parseInt(id, 10) },
+    });
+
+    if (!vacancy || vacancy.hospitalId !== hospitalId) {
+      return res.status(404).json({ error: 'Vaga não encontrada ou não pertence ao hospital.' });
     }
 
     const updatedVacancy = await prisma.vacancy.update({
@@ -70,7 +87,7 @@ const updateVacancy = async (req, res) => {
 
     res.status(200).json({ message: 'Vaga atualizada com sucesso!', vacancy: updatedVacancy });
   } catch (error) {
-    console.error('Erro ao atualizar vaga:', error); // Adiciona um log do erro para melhor depuração
+    console.error('Erro ao atualizar vaga:', error);
     res.status(500).json({ error: 'Erro ao atualizar vaga.' });
   }
 };
@@ -79,9 +96,19 @@ const updateVacancy = async (req, res) => {
 const deleteVacancy = async (req, res) => {
   try {
     const { id } = req.params;
+    const hospitalId = req.hospital.id; // Usa o hospitalId do hospital autenticado
 
     if (!id) {
       return res.status(400).json({ error: 'ID é obrigatório para excluir a vaga.' });
+    }
+
+    // Verifica se a vaga pertence ao hospital autenticado
+    const vacancy = await prisma.vacancy.findUnique({
+      where: { id: parseInt(id, 10) },
+    });
+
+    if (!vacancy || vacancy.hospitalId !== hospitalId) {
+      return res.status(404).json({ error: 'Vaga não encontrada ou não pertence ao hospital.' });
     }
 
     await prisma.vacancy.delete({
@@ -90,7 +117,7 @@ const deleteVacancy = async (req, res) => {
 
     res.status(200).json({ message: 'Vaga excluída com sucesso!' });
   } catch (error) {
-    console.error('Erro ao excluir vaga:', error); // Adiciona um log do erro para melhor depuração
+    console.error('Erro ao excluir vaga:', error);
     res.status(500).json({ error: 'Erro ao excluir vaga.' });
   }
 };

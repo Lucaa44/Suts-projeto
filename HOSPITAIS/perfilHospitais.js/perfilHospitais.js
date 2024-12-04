@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Navegação por abas
     const tabs = document.querySelectorAll('.tab-button');
     const contents = document.querySelectorAll('.tab-content');
-
+    
     tabs.forEach((tab, index) => {
         tab.addEventListener('click', function () {
             tabs.forEach(t => t.classList.remove('active'));
@@ -48,6 +48,24 @@ document.addEventListener('DOMContentLoaded', async function () {
             contents[index].classList.add('active');
         });
     });
+
+    // Função de logout
+    const logoutButton = document.getElementById('logoutButton');
+
+    if (logoutButton) {
+        logoutButton.addEventListener('click', function() {
+            // Limpa todos os dados do localStorage
+            localStorage.clear();
+
+            // Opcional: Exibe uma mensagem de confirmação
+            alert('Você saiu com sucesso.');
+
+            // Redireciona para a página de login
+            window.location.href = 'loginHospitais.html';
+        });
+    } else {
+        console.error('Botão de logout não encontrado.');
+    }
 
     // Exemplo estático de vagas (substitua por dados reais da API)
     const vacancies = [
@@ -96,7 +114,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     });
 
-    // Evento para salvar as alterações do perfil (futuramente implementar a lógica de atualização)
+    // Evento para salvar as alterações do perfil
     document.getElementById('editForm').addEventListener('submit', async function (e) {
         e.preventDefault();
 

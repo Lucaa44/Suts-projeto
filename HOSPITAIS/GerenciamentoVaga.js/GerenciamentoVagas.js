@@ -1,10 +1,17 @@
+// gerenciamentoDeVagas.js
+
 document.addEventListener('DOMContentLoaded', function() {
-    const apiCreateUrl = 'http://localhost:5000/api/vacancies/create'; // URL da API para criar vaga
-    const apiFetchUrl = 'http://localhost:5000/api/vacancies'; // URL da API para buscar vagas
+    const apiCreateUrl = 'http://localhost:5000/api/vacancies/create';
+    const apiFetchUrl = 'http://localhost:5000/api/vacancies';
+    const token = localStorage.getItem('hospitalToken');
+
+    if (!token) {
+        window.location.href = 'loginHospitais.html'; // Redireciona se não estiver autenticado
+        return;
+    }
 
     // Função para mostrar a aba selecionada
     function showTab(tabId) {
-        console.log(`Mostrando aba: ${tabId}`);
         const tabs = document.querySelectorAll('.tab-content');
         tabs.forEach(tab => tab.classList.remove('active'));
 
@@ -28,13 +35,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Selecionando elementos para o modal de adicionar vaga
     const addVacancyModal = document.getElementById('addVacancyModal');
-    if (addVacancyModal) {
-        addVacancyModal.style.display = 'none';
-    } else {
-        console.error('Erro: Modal de adicionar vaga não encontrado.');
-    }
-
     const addVacancyBtn = document.getElementById('addVacancyBtn');
+    const closeVacancyModalBtn = document.getElementById('closeVacancyModalBtn');
+
     if (addVacancyBtn) {
         addVacancyBtn.addEventListener('click', function() {
             if (addVacancyModal) {
@@ -45,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Erro: Botão de adicionar vaga não encontrado.');
     }
 
-    const closeVacancyModalBtn = document.getElementById('closeVacancyModalBtn');
     if (closeVacancyModalBtn) {
         closeVacancyModalBtn.addEventListener('click', function() {
             if (addVacancyModal) {
@@ -68,8 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
         addVacancyForm.addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            console.log('Tentando salvar nova vaga...');
-
             const bloodType = document.getElementById('bloodType')?.value;
             const quantity = parseInt(document.getElementById('quantity')?.value);
             const urgency = document.getElementById('urgency')?.value;
@@ -78,13 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const location = document.getElementById('location')?.value;
             const contact = document.getElementById('contact')?.value;
 
-            const hospitalId = localStorage.getItem('hospitalId');
-
-            if (!hospitalId) {
-                console.error("Erro: hospitalId não encontrado. O hospital precisa estar logado para criar uma vaga.");
-                return;
-            }
-
             const newVacancy = {
                 bloodType,
                 quantity,
@@ -92,8 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 deadline,
                 description,
                 location,
-                contact,
-                hospitalId : parseInt(hospitalId)
+                contact
             };
 
             try {
@@ -101,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
                     },
                     body: JSON.stringify(newVacancy)
                 });
@@ -112,7 +105,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     addVacancyForm.reset();
                     fetchVacancies();
                 } else {
-                    console.error('Erro ao salvar a vaga:', response.statusText);
+                    const errorData = await response.json();
+                    console.error('Erro ao salvar a vaga:', errorData.error || response.statusText);
                 }
             } catch (error) {
                 console.error('Erro ao conectar com o servidor:', error);
@@ -137,12 +131,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         try {
-            const response = await fetch(apiFetchUrl + queryString);
+            const response = await fetch(apiFetchUrl + queryString, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             if (response.ok) {
                 const vacancies = await response.json();
                 updateVacanciesList(vacancies);
             } else {
-                console.error('Erro ao buscar vagas:', response.statusText);
+                const errorData = await response.json();
+                console.error('Erro ao buscar vagas:', errorData.error || response.statusText);
             }
         } catch (error) {
             console.error('Erro ao conectar com o servidor:', error);
@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p><strong>Tipo Sanguíneo:</strong> ${vacancy.bloodType}</p>
                     <p><strong>Quantidade Necessária:</strong> ${vacancy.quantity}</p>
                     <p><strong>Urgência:</strong> ${vacancy.urgency}</p>
-                    <p><strong>Data Limite:</strong> ${vacancy.deadline}</p>
+                    <p><strong>Data Limite:</strong> ${new Date(vacancy.deadline).toLocaleDateString()}</p>
                     <p><strong>Descrição:</strong> ${vacancy.description}</p>
                     <p><strong>Local da Coleta:</strong> ${vacancy.location}</p>
                     <p><strong>Contato:</strong> ${vacancy.contact}</p>
@@ -181,6 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Evento para aplicar filtros
     const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+
     if (applyFiltersBtn) {
         applyFiltersBtn.addEventListener('click', function() {
             const bloodTypeFilter = document.getElementById('bloodTypeFilter')?.value;
