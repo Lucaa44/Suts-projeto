@@ -16,6 +16,41 @@
     </header>
 
     <main>
+        <!-- Formulário de Filtro -->
+        <section class="filter-section">
+            <h2>Filtrar Vagas</h2>
+            <form id="filterForm">
+                <div class="form-group">
+                    <label for="filterLocation">Localização:</label>
+                    <input type="text" id="filterLocation" name="filterLocation" placeholder="Digite a localização">
+                </div>
+                <div class="form-group">
+                    <label for="filterBloodType">Tipo Sanguíneo:</label>
+                    <select id="filterBloodType" name="filterBloodType">
+                        <option value="">Todos</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filterUrgency">Urgência:</label>
+                    <select id="filterUrgency" name="filterUrgency">
+                        <option value="">Todas</option>
+                        <option value="Baixa">Baixa</option>
+                        <option value="Média">Média</option>
+                        <option value="Alta">Alta</option>
+                    </select>
+                </div>
+                <button type="submit" class="cta-button">Filtrar</button>
+            </form>
+        </section>
+
         <!-- Carrossel de Vagas -->
         <section class="carousel" aria-label="Carrossel de Vagas">
             <button class="prev" aria-label="Anterior">&#10094;</button>
@@ -71,7 +106,6 @@
             </div>
         </section>
 
-        <!-- Restante do seu HTML permanece o mesmo -->
         <!-- Seção de Testemunhos -->
         <section class="testimonials">
             <h2>O que nossos doadores dizem</h2>

@@ -4,10 +4,28 @@ document.addEventListener('DOMContentLoaded', function() {
     let selectedVacancyId = null;
     let vacancies = []; // Armazena as vagas carregadas
 
-    // Função para carregar as vagas e atualizar o carrossel
-    async function loadVacancies() {
+    // Função para carregar as vagas com filtros opcionais
+    async function loadVacancies(filters = {}) {
         try {
-            const response = await fetch('http://localhost:5000/api/vacancies/public');
+            let url = 'http://localhost:5000/api/vacancies/public';
+
+            const params = new URLSearchParams();
+
+            if (filters.location) {
+                params.append('location', filters.location);
+            }
+            if (filters.bloodType) {
+                params.append('bloodType', filters.bloodType);
+            }
+            if (filters.urgency) {
+                params.append('urgency', filters.urgency);
+            }
+
+            if (params.toString()) {
+                url += '?' + params.toString();
+            }
+
+            const response = await fetch(url);
             if (response.ok) {
                 vacancies = await response.json(); // Armazena as vagas
                 updateCarousel(vacancies);
@@ -84,13 +102,20 @@ document.addEventListener('DOMContentLoaded', function() {
             indicators[currentSlide].classList.add('active');
         }
 
-        document.querySelector('.next').addEventListener('click', () => {
-            updateSlide((currentSlide + 1) % totalSlides);
-        });
+        const nextButton = document.querySelector('.next');
+        const prevButton = document.querySelector('.prev');
 
-        document.querySelector('.prev').addEventListener('click', () => {
-            updateSlide((currentSlide - 1 + totalSlides) % totalSlides);
-        });
+        if (nextButton) {
+            nextButton.addEventListener('click', () => {
+                updateSlide((currentSlide + 1) % totalSlides);
+            });
+        }
+
+        if (prevButton) {
+            prevButton.addEventListener('click', () => {
+                updateSlide((currentSlide - 1 + totalSlides) % totalSlides);
+            });
+        }
 
         indicators.forEach((indicator, index) => {
             indicator.addEventListener('click', () => {
@@ -250,4 +275,22 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.error("Algum elemento necessário para o modal de login não foi encontrado no DOM.");
     }
+
+    // Lógica do filtro
+    const filterForm = document.getElementById('filterForm');
+    filterForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const location = document.getElementById('filterLocation').value.trim();
+        const bloodType = document.getElementById('filterBloodType').value;
+        const urgency = document.getElementById('filterUrgency').value;
+
+        const filters = {};
+        if (location) filters.location = location;
+        if (bloodType) filters.bloodType = bloodType;
+        if (urgency) filters.urgency = urgency;
+
+        // Recarrega as vagas com os filtros aplicados
+        loadVacancies(filters);
+    });
 });

@@ -17,7 +17,7 @@ const createVacancy = async (req, res) => {
     const newVacancy = await prisma.vacancy.create({
       data: {
         bloodType,
-        quantity,
+        quantity: parseInt(quantity, 10),
         urgency,
         deadline: new Date(deadline),
         description,
@@ -92,7 +92,7 @@ const updateVacancy = async (req, res) => {
       where: { id: parseInt(id, 10) },
       data: {
         bloodType,
-        quantity,
+        quantity: parseInt(quantity, 10),
         urgency,
         deadline: new Date(deadline),
         description,
@@ -135,13 +135,34 @@ const closeVacancy = async (req, res) => {
   }
 };
 
-// Função para listar vagas públicas (abertas)
+// Função para listar vagas públicas (abertas) com filtros
 const getPublicVacancies = async (req, res) => {
   try {
+    const { location, bloodType, urgency } = req.query;
+
+    const conditions = {
+      isClosed: false,
+    };
+
+    // Aplica filtros se existirem
+    if (location) {
+      // Supondo que location seja um campo texto na vaga:
+      conditions.location = {
+        contains: location,
+        mode: 'insensitive' // Torna a busca case-insensitive
+      };
+    }
+
+    if (bloodType) {
+      conditions.bloodType = bloodType;
+    }
+
+    if (urgency) {
+      conditions.urgency = urgency;
+    }
+
     const vacancies = await prisma.vacancy.findMany({
-      where: {
-        isClosed: false,
-      },
+      where: conditions,
       include: {
         hospital: true, // Inclui informações do hospital
       },

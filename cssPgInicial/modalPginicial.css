@@ -89,3 +89,86 @@
 .modal-content form input[type="submit"]:hover {
     background-color: #2980b9; /* Cor ao passar o mouse */
 }
+
+/* Estilos para a Seção de Filtro */
+.filter-section {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filter-section h2 {
+    text-align: center;
+    color: #1e90ff;
+    margin-bottom: 20px;
+}
+
+.filter-section form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    flex: 1 1 30%; /* Cada form-group ocupa cerca de 30% do espaço, ajuste conforme necessário */
+    margin-right: 10px;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.form-group input[type="text"],
+.form-group select {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.cta-button {
+    background-color: #1e90ff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-top: 15px;
+    flex: 0 0 auto; /* O botão não cresce, apenas ocupa o espaço necessário */
+}
+
+.cta-button:hover {
+    background-color: #1c7ed6;
+}
+
+/* Ajustes de responsividade */
+@media (max-width: 768px) {
+    .form-group {
+        flex: 1 1 100%;
+        margin-right: 0;
+    }
+
+    .filter-section form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cta-button {
+        width: 100%;
+        max-width: none;
+        margin-top: 20px;
+        text-align: center;
+    }
+}
