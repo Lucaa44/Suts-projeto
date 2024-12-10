@@ -333,5 +333,73 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
+    function updatePendingsList(pendings) {
+        const pendingsList = document.getElementById('pendingsList');
+    
+        if (pendingsList) {
+            pendingsList.innerHTML = '';
+    
+            if (pendings.length === 0) {
+                pendingsList.innerHTML = '<p>Você não tem pendências no momento.</p>';
+                return;
+            }
+    
+            pendings.forEach(pending => {
+                const pendingItem = document.createElement('div');
+                pendingItem.classList.add('pendency');
+                pendingItem.innerHTML = `
+                    <h4>${pending.vacancy.hospital.name}</h4>
+                    <p><strong>Tipo Sanguíneo:</strong> ${pending.vacancy.bloodType}</p>
+                    <p><strong>Urgência:</strong> ${pending.vacancy.urgency}</p>
+                    <p><strong>Status:</strong> ${pending.status}</p>
+                    <p><strong>Data Limite:</strong> ${new Date(pending.vacancy.deadline).toLocaleDateString()}</p>
+                    <button class="conclude-pending-btn" data-id="${pending.id}">Concluir</button>
+                `;
+                pendingsList.appendChild(pendingItem);
+    
+                const concludeButton = pendingItem.querySelector('.conclude-pending-btn');
+                concludeButton.addEventListener('click', function() {
+                    const pendingDonationId = this.getAttribute('data-id');
+                    concludeDonationUserSide(pendingDonationId);
+                });
+            });
+        }
+    }
+    
+    async function concludeDonationUserSide(pendingDonationId) {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Você precisa estar logado para realizar esta ação.');
+            return;
+        }
+    
+        if (!confirm('Deseja realmente concluir esta doação?')) {
+            return;
+        }
+    
+        try {
+            const response = await fetch(`http://localhost:5000/api/users/concludeDonation/${pendingDonationId}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            if (response.ok) {
+                alert('Doação concluída com sucesso!');
+                // Recarrega pendências e histórico
+                fetchPendings();
+                fetchDonationHistory();
+            } else {
+                const errorData = await response.json();
+                console.error('Erro ao concluir a doação:', errorData.error || response.statusText);
+                alert(`Erro: ${errorData.error || 'Não foi possível concluir a doação.'}`);
+            }
+        } catch (error) {
+            console.error('Erro ao conectar com o servidor:', error);
+            alert('Erro ao conectar com o servidor.');
+        }
+    }
+
     // Removido o chamado inicial para fetchPendings(), pois agora ele é chamado ao clicar na aba correspondente
 });

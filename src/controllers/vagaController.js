@@ -9,7 +9,6 @@ const createVacancy = async (req, res) => {
     const { bloodType, quantity, urgency, deadline, description, location, contact } = req.body;
     const hospitalId = req.hospital.id;
 
-    // Certifique-se de que todos os campos obrigatórios estão presentes
     if (!bloodType || !quantity || !urgency || !deadline) {
       return res.status(400).json({ error: 'Todos os campos obrigatórios devem ser preenchidos.' });
     }
@@ -40,10 +39,7 @@ const getVacancies = async (req, res) => {
     const hospitalId = req.hospital.id;
     const { bloodType, urgency, isClosed } = req.query;
 
-    // Construir objeto de condições
-    const conditions = {
-      hospitalId: hospitalId,
-    };
+    const conditions = { hospitalId };
 
     if (bloodType) {
       conditions.bloodType = bloodType;
@@ -74,12 +70,10 @@ const updateVacancy = async (req, res) => {
     const { bloodType, quantity, urgency, deadline, description, location, contact } = req.body;
     const hospitalId = req.hospital.id;
 
-    // Validações dos campos obrigatórios
     if (!id || !bloodType || !quantity || !urgency || !deadline) {
       return res.status(400).json({ error: 'Campos obrigatórios faltando.' });
     }
 
-    // Verifica se a vaga pertence ao hospital autenticado
     const vacancy = await prisma.vacancy.findUnique({
       where: { id: parseInt(id, 10) },
     });
@@ -108,13 +102,12 @@ const updateVacancy = async (req, res) => {
   }
 };
 
-// Função para concluir uma vaga
+// Função para concluir uma vaga (fechar a vaga)
 const closeVacancy = async (req, res) => {
   try {
     const { id } = req.params;
     const hospitalId = req.hospital.id;
 
-    // Verifica se a vaga pertence ao hospital autenticado
     const vacancy = await prisma.vacancy.findUnique({
       where: { id: parseInt(id, 10) },
     });
@@ -123,10 +116,34 @@ const closeVacancy = async (req, res) => {
       return res.status(404).json({ error: 'Vaga não encontrada ou não pertence ao hospital.' });
     }
 
+    // Atualiza a vaga para isClosed = true
     const closedVacancy = await prisma.vacancy.update({
       where: { id: parseInt(id, 10) },
       data: { isClosed: true },
     });
+
+    // Encontra todas as pendências pendentes desta vaga
+    const pendingDonations = await prisma.pendingDonation.findMany({
+      where: {
+        vacancyId: parseInt(id, 10),
+        status: 'pendente',
+      }
+    });
+
+    // Para cada pendência, cria uma doação concluída pelo hospital e remove a pendência
+    for (const pending of pendingDonations) {
+      await prisma.donation.create({
+        data: {
+          userId: pending.userId,
+          vacancyId: pending.vacancyId,
+          status: 'concluída pelo hospital',
+        }
+      });
+
+      await prisma.pendingDonation.delete({
+        where: { id: pending.id }
+      });
+    }
 
     res.status(200).json({ message: 'Vaga concluída com sucesso!', vacancy: closedVacancy });
   } catch (error) {
@@ -144,12 +161,10 @@ const getPublicVacancies = async (req, res) => {
       isClosed: false,
     };
 
-    // Aplica filtros se existirem
     if (location) {
-      // Supondo que location seja um campo texto na vaga:
       conditions.location = {
         contains: location,
-        mode: 'insensitive' // Torna a busca case-insensitive
+        mode: 'insensitive'
       };
     }
 
@@ -164,7 +179,7 @@ const getPublicVacancies = async (req, res) => {
     const vacancies = await prisma.vacancy.findMany({
       where: conditions,
       include: {
-        hospital: true, // Inclui informações do hospital
+        hospital: true,
       },
     });
     res.status(200).json(vacancies);

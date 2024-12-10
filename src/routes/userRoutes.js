@@ -9,7 +9,8 @@ const {
     getUserPendings,
     getDonationHistory,
     getUserBadges,
-    getUserNotifications
+    getUserNotifications,
+    concludeDonationFromUser // Importa a função para concluir a doação pelo usuário
 } = require('../controllers/userController');
 const { protect } = require('../middleware/authMiddleware');
 
@@ -38,5 +39,8 @@ router.get('/badges', protect, getUserBadges);
 
 // Rota para obter as notificações do usuário autenticado
 router.get('/notifications', protect, getUserNotifications);
+
+// Nova rota para o usuário concluir a pendência
+router.put('/concludeDonation/:pendingDonationId', protect, concludeDonationFromUser);
 
 module.exports = router;

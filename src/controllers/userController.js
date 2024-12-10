@@ -253,6 +253,51 @@ const getUserNotifications = async (req, res) => {
     }
 };
 
+// Função para o usuário concluir uma pendência manualmente
+const concludeDonationFromUser = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { pendingDonationId } = req.params;
+
+        // Busca a pendência
+        const pending = await prisma.pendingDonation.findUnique({
+            where: { id: parseInt(pendingDonationId, 10) },
+            include: { vacancy: true },
+        });
+
+        if (!pending) {
+            return res.status(404).json({ error: 'Pendência não encontrada.' });
+        }
+
+        if (pending.userId !== userId) {
+            return res.status(403).json({ error: 'Não autorizado a concluir esta pendência.' });
+        }
+
+        if (pending.status !== 'pendente') {
+            return res.status(400).json({ error: 'Esta pendência já foi concluída ou não está mais pendente.' });
+        }
+
+        // Cria uma doação concluída pelo usuário
+        await prisma.donation.create({
+            data: {
+                userId: userId,
+                vacancyId: pending.vacancyId,
+                status: 'concluída pelo usuário',
+            }
+        });
+
+        // Remove a pendência
+        await prisma.pendingDonation.delete({
+            where: { id: pending.id }
+        });
+
+        res.status(200).json({ message: 'Doação concluída com sucesso!' });
+    } catch (error) {
+        console.error('Erro ao concluir a doação pelo usuário:', error);
+        res.status(500).json({ error: 'Erro ao concluir a doação.' });
+    }
+};
+
 module.exports = {
     registerUser,
     loginUser,
@@ -261,5 +306,6 @@ module.exports = {
     getUserPendings,
     getDonationHistory,
     getUserBadges,
-    getUserNotifications
+    getUserNotifications,
+    concludeDonationFromUser,
 };
