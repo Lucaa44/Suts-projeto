@@ -4,50 +4,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUTS-Doações de Sangue</title>
+    <title>SUTS - Saiba Mais sobre Doação de Sangue</title>
     <link rel="stylesheet" href="cssAcessoDoador/AcessoDoador.css">
     <script src="AcessoDoadorJS/AcessoDoador.js" defer></script>
 </head>
 
 <body>
     <header>
-        <h1>Bem-vindo à SUTS-Doações de Sangue</h1>
+        <h1>SUTS - Doações de Sangue</h1>
+        <p>Conectando doadores e hospitais para salvar vidas. Entenda o processo e faça parte dessa corrente do bem.</p>
     </header>
 
     <main>
+        <section class="intro">
+            <h2>Por que doar sangue?</h2>
+            <p>Doar sangue é um ato de solidariedade que pode salvar até quatro vidas com uma única doação. Além disso, você fica sabendo quando seu tipo sanguíneo é necessário, contribuindo diretamente para pacientes que precisam de transfusões.</p>
+        </section>
+
+        <section class="steps">
+            <h2>Como funciona a doação de sangue?</h2>
+            <div class="step-container">
+                <div class="step">
+                    <img src="cssAcessoDoador/imgs/calendar.png" alt="Checkup">
+                    <h3>1. Avaliação</h3>
+                    <p>Antes da doação, você passa por uma triagem rápida que avalia sua saúde e garante a segurança da transfusão.</p>
+                </div>
+                <div class="step">
+                    <img src="cssAcessoDoador/imgs/peace.png" alt="Doação">
+                    <h3>2. Doação</h3>
+                    <p>A coleta leva em média 10 minutos e retira cerca de 450 ml de sangue, quantidade segura para o doador.</p>
+                </div>
+                <div class="step">
+                    <img src="cssAcessoDoador/imgs/paypal.png" alt="Recuperação">
+                    <h3>3. Recuperação</h3>
+                    <p>Após a doação, você recebe um lanche e orientações. No mesmo dia já pode voltar às atividades leves.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="blood-types">
+            <h2>Tipos Sanguíneos e Compatibilidade</h2>
+            <img src="img/tipos-sanguineos.png" alt="Tabela de Compatibilidade" class="blood-chart">
+            <p>Conhecer seu tipo sanguíneo é importante: cada tipo possui compatibilidades específicas. Ao se cadastrar, você será notificado quando o seu tipo for necessário.</p>
+        </section>
+
         <section class="cta-description">
             <div class="cta-link">
                 <a href="PgDoador.html">
                     <button class="cta-button">Cadastre-se Antes de Doar</button>
                 </a>
-                <p>Cadastre-se para ajudar a salvar vidas através da doação de sangue.</p>
+                <p>Cadastre-se gratuitamente e seja informado sempre que sua ajuda for necessária.</p>
             </div>
 
             <div class="cta-link">
                 <a href="PerfilDoador.html">
                     <button id="openModalBtn" class="cta-button">Acessar Perfil</button>
                 </a>
-                <p>Acesse seu perfil para acompanhar suas doações e atualizações.</p>
+                <p>Se já é um doador cadastrado, acesse seu perfil para acompanhar seu histórico e atualizações.</p>
             </div>
         </section>
 
         <section class="highlights">
-            <h2>Por que se cadastrar?</h2>
+            <h2>Benefícios do Cadastro</h2>
             <ul>
-                <li>Acompanhe suas doações de sangue facilmente.</li>
-                <li>Receba notificações quando seu tipo sanguíneo for necessário.</li>
-                <li>Acesso rápido ao histórico de doações.</li>
-                <li>Contribua para salvar vidas!</li>
+                <li>Acompanhe suas doações de sangue e conquistas.</li>
+                <li>Receba notificações urgentes quando seu tipo sanguíneo for necessário.</li>
+                <li>Acesso rápido ao histórico de doações e exames.</li>
             </ul>
         </section>
 
         <section class="testimonials">
-            <h2>Depoimentos</h2>
+            <h2>Depoimentos de Quem Já Doa</h2>
             <div class="testimonial">
-                <p>"Doar sangue é uma experiência incrível! Saber que ajudei a salvar uma vida me enche de alegria." - João Silva</p>
+                <p>"Doar sangue é incrível! Saber que ajudei a salvar uma vida me enche de alegria." - João Silva</p>
             </div>
             <div class="testimonial">
-                <p>"Recebi uma transfusão de sangue que salvou minha vida. Sou eternamente grata aos doadores." - Maria Oliveira</p>
+                <p>"Recebi uma transfusão que salvou minha vida. Serei eternamente grata aos doadores." - Maria Oliveira</p>
             </div>
         </section>
 
@@ -58,8 +90,12 @@
                 <p>Pessoas saudáveis entre 18 e 69 anos, com mais de 50kg, podem doar sangue.</p>
             </div>
             <div class="faq-item">
-                <h3>Quantas vezes posso doar sangue por ano?</h3>
-                <p>Homens podem doar até 4 vezes por ano, e mulheres até 3 vezes por ano.</p>
+                <h3>Quantas vezes posso doar por ano?</h3>
+                <p>Homens podem doar até 4 vezes por ano; mulheres, até 3 vezes. É preciso respeitar o intervalo mínimo entre doações.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Preciso estar em jejum?</h3>
+                <p>Não. É recomendado estar bem alimentado, evitando apenas refeições muito gordurosas antes da doação.</p>
             </div>
         </section>
 

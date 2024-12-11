@@ -22,9 +22,16 @@ body {
 header {
     background-color: #1e90ff; /* Azul forte */
     color: #fff;
-    padding: 20px 0;
+    padding: 20px 20px;
     text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header p {
+    max-width: 600px;
+    margin: 10px auto 0;
+    font-size: 16px;
+    line-height: 1.4;
 }
 
 /* Conteúdo principal */
@@ -33,23 +40,103 @@ main {
     max-width: 900px;
     margin: 20px auto;
     background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para o container principal */
-    border-radius: 8px; /* Cantos arredondados */
-    flex-grow: 1; /* Permite que o main cresça para preencher o espaço disponível */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-/* Links de ação */
-.cta-link {
-    margin-bottom: 20px;
+.intro {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.intro p {
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.4;
+}
+
+.steps {
     width: 100%;
+    margin: 30px 0;
     text-align: center;
 }
 
+.steps h2 {
+    color: #1e90ff;
+}
+
+.step-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.step {
+    background-color: #e6f7ff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 250px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.step img {
+    width: 50px;
+    margin-bottom: 10px;
+}
+
+.step h3 {
+    color: #1e90ff;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.blood-types {
+    margin: 30px 0;
+    text-align: center;
+}
+
+.blood-types h2 {
+    color: #1e90ff;
+    margin-bottom: 15px;
+}
+
+.blood-chart {
+    max-width: 300px;
+    margin: 20px auto;
+    display: block;
+}
+
+.blood-types p {
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 16px;
+    line-height: 1.4;
+    margin-top: 10px;
+}
+
+.cta-description {
+    width: 100%;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.cta-link {
+    text-align: center;
+    width: 100%;
+}
+
 .cta-button {
-    background-color: #1e90ff; /* Azul forte */
+    background-color: #1e90ff;
     color: #fff;
     padding: 15px 30px;
     border: none;
@@ -57,57 +144,61 @@ main {
     cursor: pointer;
     font-size: 18px;
     transition: background-color 0.3s ease;
-    margin: 10px; /* Adiciona espaçamento ao redor de cada botão */
-    width: 100%; /* Faz o botão ocupar toda a largura do container */
-    max-width: 300px; /* Define um limite máximo de largura para os botões */
+    margin: 10px;
+    width: 100%;
+    max-width: 300px;
 }
 
 .cta-button:hover {
-    background-color: #1c7ed6; /* Azul um pouco mais escuro no hover */
+    background-color: #1c7ed6;
 }
 
-.cta-description p {
+.cta-link p {
     margin-top: 5px;
     color: #555;
     font-size: 14px;
 }
 
-/* Seção de Destaques */
 .highlights {
-    background-color: #e6f7ff; /* Azul claro */
+    background-color: #e6f7ff;
     padding: 20px;
-    margin-top: 20px;
+    margin-top: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
 .highlights h2 {
     color: #1e90ff;
     margin-bottom: 15px;
+    text-align: center;
 }
 
 .highlights ul {
     list-style-type: disc;
     padding-left: 20px;
     color: #333;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .highlights li {
     margin-bottom: 10px;
 }
 
-/* Testemunhos */
 .testimonials {
     background-color: #f4f7fc;
     padding: 20px;
-    margin-top: 20px;
+    margin-top: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
 .testimonials h2 {
     color: #1e90ff;
     margin-bottom: 15px;
+    text-align: center;
 }
 
 .testimonial {
@@ -121,35 +212,42 @@ main {
 .testimonial p {
     color: #333;
     font-style: italic;
+    font-size: 16px;
 }
 
-/* FAQ */
 .faq {
     padding: 20px;
-    margin-top: 20px;
+    margin-top: 30px;
+    width: 100%;
 }
 
 .faq h2 {
     color: #1e90ff;
     margin-bottom: 15px;
+    text-align: center;
 }
 
 .faq-item {
     margin-bottom: 15px;
+    max-width: 600px;
+    margin: 0 auto 15px auto;
 }
 
 .faq-item h3 {
     color: #1c7ed6;
     margin-bottom: 5px;
+    font-size: 18px;
 }
 
 .faq-item p {
     color: #333;
+    font-size: 16px;
+    line-height: 1.4;
 }
 
 /* Modal */
 .modal {
-    display: none; /* Oculto por padrão */
+    display: none;
     position: fixed;
     z-index: 1;
     left: 0;
@@ -157,7 +255,7 @@ main {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4); /* Fundo escurecido */
+    background-color: rgba(0, 0, 0, 0.4);
     justify-content: center;
     align-items: center;
 }
@@ -169,14 +267,17 @@ main {
     border: 1px solid #ccc;
     width: 80%;
     max-width: 500px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra ao redor do modal */
-    border-radius: 8px; /* Cantos arredondados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
     text-align: left;
+    position: relative;
 }
 
 .close {
     color: #aaa;
-    float: right;
+    position: absolute;
+    top: 15px;
+    right: 15px;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
@@ -187,7 +288,6 @@ main {
     color: #000;
 }
 
-/* Formulário do Modal */
 .form-group {
     margin-bottom: 15px;
 }
@@ -207,7 +307,7 @@ input[type="email"], input[type="password"] {
 }
 
 input[type="submit"] {
-    background-color: #1e90ff; /* Azul forte */
+    background-color: #1e90ff;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -216,21 +316,20 @@ input[type="submit"] {
     font-size: 16px;
     transition: background-color 0.3s ease;
     width: 100%;
+    margin-top: 10px;
 }
 
 input[type="submit"]:hover {
-    background-color: #1c7ed6; /* Azul um pouco mais escuro no hover */
+    background-color: #1c7ed6;
 }
 
-/* Mensagens de erro */
 .error-message {
     color: red;
     font-size: 14px;
-    display: none; /* Oculto por padrão */
+    display: none;
     margin-top: 5px;
 }
 
-/* Animação de carregamento */
 .loading {
     display: none;
     margin-top: 15px;
@@ -241,13 +340,13 @@ input[type="submit"]:hover {
 
 /* Rodapé */
 footer {
-    background-color: #1e90ff; /* Azul forte */
+    background-color: #1e90ff;
     color: #fff;
     text-align: center;
     padding: 15px 0;
-    margin-top: auto; /* Mantém o footer no fundo da página */
-    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1); /* Sombra superior */
-    border-radius: 0 0 8px 8px; /* Cantos arredondados no rodapé */
+    margin-top: auto;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 8px 8px;
 }
 
 .footer-nav {
