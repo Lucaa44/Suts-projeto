@@ -162,6 +162,46 @@ header {
     color: #333;
 }
 
+/* Estilo para o contêiner de notificações */
+.notifications-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Cada notificação */
+.notification {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.notification p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Título da notificação */
+.notification p strong {
+    font-size: 16px;
+    color: #333;
+}
+
+/* Data da notificação */
+.notification small {
+    font-size: 12px;
+    color: #888;
+    align-self: flex-end;
+}
+
+
 /* Footer */
 footer {
     background-color: #007bff; /* Azul forte */
