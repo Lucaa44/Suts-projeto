@@ -110,6 +110,7 @@ const closeVacancy = async (req, res) => {
 
     const vacancy = await prisma.vacancy.findUnique({
       where: { id: parseInt(id, 10) },
+      include: { hospital: true } // Inclui informações do hospital para usar na notificação
     });
 
     if (!vacancy || vacancy.hospitalId !== hospitalId) {
@@ -132,6 +133,7 @@ const closeVacancy = async (req, res) => {
 
     // Para cada pendência, cria uma doação concluída pelo hospital e remove a pendência
     for (const pending of pendingDonations) {
+      // Cria a doação
       await prisma.donation.create({
         data: {
           userId: pending.userId,
@@ -140,8 +142,18 @@ const closeVacancy = async (req, res) => {
         }
       });
 
+      // Remove a pendência
       await prisma.pendingDonation.delete({
         where: { id: pending.id }
+      });
+
+      // Cria notificação informando que a vaga foi encerrada pelo hospital
+      await prisma.notification.create({
+        data: {
+          userId: pending.userId,
+          title: 'Vaga Encerrada',
+          message: `A vaga ${vacancy.bloodType} no hospital ${vacancy.hospital.name} foi encerrada pelo hospital.`
+        }
       });
     }
 
