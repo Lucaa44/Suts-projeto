@@ -10,24 +10,16 @@ const registerUser = async (req, res) => {
     const { name, email, cpf, password, bloodType } = req.body;
 
     try {
-        // Verifica se o usuário já existe pelo email ou CPF
-        const existingUser = await prisma.user.findUnique({
-            where: { email }
-        });
-
-        const existingCpf = await prisma.user.findUnique({
-            where: { cpf }
-        });
+        const existingUser = await prisma.user.findUnique({ where: { email } });
+        const existingCpf = await prisma.user.findUnique({ where: { cpf } });
 
         if (existingUser || existingCpf) {
             return res.status(400).json({ message: 'Usuário já existe' });
         }
 
-        // Criptografa a senha
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Cria o novo usuário
         const newUser = await prisma.user.create({
             data: {
                 name,
@@ -38,10 +30,7 @@ const registerUser = async (req, res) => {
             }
         });
 
-        // Gera um token JWT
-        const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
-            expiresIn: '30d'
-        });
+        const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
         res.status(201).json({
             id: newUser.id,
@@ -62,34 +51,47 @@ const loginUser = async (req, res) => {
     const { email, password, vacancyId } = req.body;
 
     try {
-        const user = await prisma.user.findUnique({
-            where: { email }
-        });
+        const user = await prisma.user.findUnique({ where: { email } });
 
         if (user && (await bcrypt.compare(password, user.password))) {
-            // Gera um token JWT
-            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-                expiresIn: '30d'
-            });
+            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
-            // Se vacancyId estiver presente, criar uma pendência
+            // Se vacancyId estiver presente, criar uma pendência e notificar o hospital
             if (vacancyId) {
-                // Verifica se a pendência já existe
+                const vacancy = await prisma.vacancy.findUnique({
+                    where: { id: parseInt(vacancyId, 10) },
+                    include: { hospital: true }
+                });
+
+                if (!vacancy) {
+                    return res.status(404).json({ message: 'Vaga não encontrada' });
+                }
+
                 const existingPending = await prisma.pendingDonation.findFirst({
                     where: {
                         userId: user.id,
-                        vacancyId: parseInt(vacancyId),
+                        vacancyId: parseInt(vacancyId, 10),
                         status: 'pendente'
                     }
                 });
 
                 if (!existingPending) {
+                    // Cria a pendência
                     await prisma.pendingDonation.create({
                         data: {
                             userId: user.id,
-                            vacancyId: parseInt(vacancyId),
+                            vacancyId: parseInt(vacancyId, 10),
                             status: 'pendente',
                             createdAt: new Date()
+                        }
+                    });
+
+                    // Cria notificação para o hospital
+                    await prisma.notification.create({
+                        data: {
+                            hospitalId: vacancy.hospitalId,
+                            title: 'Novo Candidato',
+                            message: `O usuário ${user.name} (Tipo sanguíneo: ${user.bloodType}, Email: ${user.email}) se candidatou à vaga ${vacancy.bloodType}.`
                         }
                     });
                 }
@@ -140,14 +142,9 @@ const updateUserProfile = async (req, res) => {
 
     try {
         const userId = req.user.id;
-
-        // Atualiza o usuário
         const updatedUser = await prisma.user.update({
             where: { id: userId },
-            data: {
-                email,
-                // Outros campos se necessário
-            },
+            data: { email }
         });
 
         res.json({
@@ -167,18 +164,14 @@ const updateUserProfile = async (req, res) => {
 const getUserPendings = async (req, res) => {
     try {
         const userId = req.user.id;
-
         const pendings = await prisma.pendingDonation.findMany({
             where: { userId },
             include: {
                 vacancy: {
-                    include: {
-                        hospital: true,
-                    },
+                    include: { hospital: true },
                 },
             },
         });
-
         res.json(pendings);
     } catch (error) {
         console.error('Erro ao obter pendências do usuário:', error);
@@ -190,21 +183,15 @@ const getUserPendings = async (req, res) => {
 const getDonationHistory = async (req, res) => {
     try {
         const userId = req.user.id;
-
         const donations = await prisma.donation.findMany({
             where: { userId },
             include: {
                 vacancy: {
-                    include: {
-                        hospital: true,
-                    },
+                    include: { hospital: true },
                 },
             },
-            orderBy: {
-                createdAt: 'desc',
-            },
+            orderBy: { createdAt: 'desc' },
         });
-
         res.json(donations);
     } catch (error) {
         console.error('Erro ao obter histórico de doações:', error);
@@ -216,17 +203,11 @@ const getDonationHistory = async (req, res) => {
 const getUserBadges = async (req, res) => {
     try {
         const userId = req.user.id;
-
         const userBadges = await prisma.userBadge.findMany({
             where: { userId },
-            include: {
-                badge: true,
-            },
-            orderBy: {
-                earnedAt: 'desc',
-            },
+            include: { badge: true },
+            orderBy: { earnedAt: 'desc' },
         });
-
         res.json(userBadges);
     } catch (error) {
         console.error('Erro ao obter insígnias do usuário:', error);
@@ -238,14 +219,10 @@ const getUserBadges = async (req, res) => {
 const getUserNotifications = async (req, res) => {
     try {
         const userId = req.user.id;
-
         const notifications = await prisma.notification.findMany({
             where: { userId },
-            orderBy: {
-                createdAt: 'desc',
-            },
+            orderBy: { createdAt: 'desc' },
         });
-
         res.json(notifications);
     } catch (error) {
         console.error('Erro ao obter notificações do usuário:', error);
@@ -259,7 +236,6 @@ const concludeDonationFromUser = async (req, res) => {
         const userId = req.user.id;
         const { pendingDonationId } = req.params;
 
-        // Busca a pendência
         const pending = await prisma.pendingDonation.findUnique({
             where: { id: parseInt(pendingDonationId, 10) },
             include: { vacancy: true },
@@ -277,7 +253,6 @@ const concludeDonationFromUser = async (req, res) => {
             return res.status(400).json({ error: 'Esta pendência já foi concluída ou não está mais pendente.' });
         }
 
-        // Cria uma doação concluída pelo usuário
         await prisma.donation.create({
             data: {
                 userId: userId,
@@ -286,10 +261,7 @@ const concludeDonationFromUser = async (req, res) => {
             }
         });
 
-        // Remove a pendência
-        await prisma.pendingDonation.delete({
-            where: { id: pending.id }
-        });
+        await prisma.pendingDonation.delete({ where: { id: pending.id } });
 
         res.status(200).json({ message: 'Doação concluída com sucesso!' });
     } catch (error) {

@@ -22,22 +22,23 @@ model User {
   bloodType        String            @default("Unknown")
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
-  pendingDonations PendingDonation[] // Relação com PendingDonation
-  donations        Donation[]        // Relação com Donation
-  userBadges       UserBadge[]       // Relação com UserBadge
-  notifications    Notification[]    // Relação com Notification
+  pendingDonations PendingDonation[] 
+  donations        Donation[]        
+  userBadges       UserBadge[]       
+  notifications    Notification[]     // Relação com Notification (destinadas ao usuário)
 }
 
 model Hospital {
-  id          Int       @id @default(autoincrement())
-  cnpj        String    @unique
+  id          Int          @id @default(autoincrement())
+  cnpj        String       @unique
   name        String
-  email       String    @unique
+  email       String       @unique
   phone       String
   address     String
   specialties String
   password    String
   vacancies   Vacancy[]
+  notifications Notification[] // Relação com Notification (destinadas ao hospital)
 }
 
 model Vacancy {
@@ -54,8 +55,8 @@ model Vacancy {
   hospitalId       Int
   hospital         Hospital          @relation(fields: [hospitalId], references: [id])
   isClosed         Boolean           @default(false)
-  pendingDonations PendingDonation[] // Relação com PendingDonation
-  donations        Donation[]        // Relação com Donation
+  pendingDonations PendingDonation[] 
+  donations        Donation[]        
 }
 
 model PendingDonation {
@@ -83,7 +84,7 @@ model Badge {
   name        String
   imageUrl    String
   description String?
-  criteria    Int        // Número mínimo de doações para conquistar a insígnia
+  criteria    Int        
   userBadges  UserBadge[]
 }
 
@@ -97,11 +98,13 @@ model UserBadge {
 }
 
 model Notification {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
-  title     String
-  message   String
-  read      Boolean  @default(false)
-  createdAt DateTime @default(now())
+  id         Int       @id @default(autoincrement())
+  userId     Int?
+  user       User?     @relation(fields: [userId], references: [id])
+  hospitalId Int?
+  hospital   Hospital? @relation(fields: [hospitalId], references: [id])
+  title      String
+  message    String
+  read       Boolean   @default(false)
+  createdAt  DateTime  @default(now())
 }

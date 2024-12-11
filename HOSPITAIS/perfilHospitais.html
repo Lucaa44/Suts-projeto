@@ -21,6 +21,7 @@
             <button class="tab-button active" data-tab="hospital-info"><i class="fas fa-info-circle"></i> Dados do Hospital</button>
             <button class="tab-button" data-tab="donation-needs"><i class="fas fa-heart"></i> Vagas de Doação</button>
             <button class="tab-button" data-tab="settings"><i class="fas fa-cog"></i> Configurações</button>
+            <button class="tab-button" data-tab="notificationsHospitais"><i class="fas fa-bell"></i> Notificações</button>
         </div>
 
         <!-- Seção de Dados do Hospital -->
@@ -33,7 +34,6 @@
                 <p><i class="fas fa-phone"></i> <strong>Telefone:</strong> <span id="phone"></span></p>
                 <p><i class="fas fa-map-marker-alt"></i> <strong>Endereço:</strong> <span id="address"></span></p>
                 <p><i class="fas fa-user-md"></i> <strong>Especialidades:</strong> <span id="specialties"></span></p>
-                
             </div>
             <button id="editInfoBtn" class="cta-button"><i class="fas fa-edit"></i> Editar Informações</button>
         </section>
@@ -41,14 +41,7 @@
         <!-- Seção de Vagas de Doação -->
         <section id="donation-needs" class="tab-content">
             <h2><i class="fas fa-heart"></i> Vagas de Doação de Sangue</h2>
-            <div class="vacancies">
-                <!-- Lista Resumida de Vagas será preenchida via JavaScript -->
-                <div class="vacancy-item">
-                    <p><i class="fas fa-tint"></i> <strong>Tipo Sanguíneo:</strong> O+</p>
-                    <p><i class="fas fa-medkit"></i> <strong>Quantidade Necessária:</strong> 5 bolsas</p>
-                    <p><i class="fas fa-exclamation-triangle"></i> <strong>Urgência:</strong> Alta</p>
-                </div>
-            </div>
+            <div class="vacancies"></div>
             <button id="goToManageVacanciesBtn" class="cta-button"><i class="fas fa-arrow-right"></i> Gerenciar Vagas</button>
         </section>
 
@@ -59,8 +52,15 @@
                 <p>Configurações gerais de conta e preferências.</p>
             </div>
             <button id="logoutButton">Sair</button>
+        </section>
 
-        </section> 
+        <!-- Seção de Notificações do Hospital -->
+        <section id="notificationsHospitais" class="tab-content" style="display: none;">
+            <h2><i class="fas fa-bell"></i> Notificações</h2>
+            <div id="hospitalNotificationsList">
+                <p>Carregando notificações...</p>
+            </div>
+        </section>
 
         <!-- Modal para Edição -->
         <div id="editModal" class="modal" aria-hidden="true">

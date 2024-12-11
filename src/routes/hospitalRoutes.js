@@ -1,16 +1,16 @@
+// routes/hospitalRoutes.js
+
 const express = require('express');
-const { registerHospital, loginHospital, getHospitalProfile } = require('../controllers/hospitalsController');
-const { protectHospital } = require('../middleware/authHospitalMiddleware'); // Nome correto
+const { registerHospital, loginHospital, getHospitalProfile, getHospitalNotifications } = require('../controllers/hospitalsController');
+const { protectHospital } = require('../middleware/authHospitalMiddleware');
 
 const router = express.Router();
 
-// Rota para registrar um novo hospital
 router.post('/register', registerHospital);
-
-// Rota para login de hospital
 router.post('/login', loginHospital);
+router.get('/profile', protectHospital, getHospitalProfile);
 
-// Rota para obter o perfil do hospital autenticado
-router.get('/profile', protectHospital, getHospitalProfile); // Middleware correto
+// Nova rota para obter notificações do hospital
+router.get('/notifications', protectHospital, getHospitalNotifications);
 
 module.exports = router;

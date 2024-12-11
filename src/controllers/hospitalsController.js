@@ -1,14 +1,14 @@
+// hospitaiscontroller.js
+
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// Registro de um novo hospital
 const registerHospital = async (req, res) => {
     const { name, cnpj, email, phone, address, specialties, password } = req.body;
 
     try {
-        // Verifica se o hospital já existe pelo email
         const existingHospital = await prisma.hospital.findUnique({
             where: { cnpj }
         });
@@ -17,11 +17,9 @@ const registerHospital = async (req, res) => {
             return res.status(400).json({ message: 'Hospital já existe' });
         }
 
-        // Criptografa a senha
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Cria o novo hospital
         const newHospital = await prisma.hospital.create({
             data: {
                 name,
@@ -34,7 +32,6 @@ const registerHospital = async (req, res) => {
             }
         });
 
-        // Gera um token JWT
         const token = jwt.sign({ id: newHospital.id }, process.env.JWT_SECRET, {
             expiresIn: '30d'
         });
@@ -55,7 +52,6 @@ const registerHospital = async (req, res) => {
     }
 };
 
-// Login do hospital
 const loginHospital = async (req, res) => {
     const { cnpj, password } = req.body;
 
@@ -65,7 +61,6 @@ const loginHospital = async (req, res) => {
         });
 
         if (hospital && (await bcrypt.compare(password, hospital.password))) {
-            // Gera um token JWT
             const token = jwt.sign({ id: hospital.id }, process.env.JWT_SECRET, {
                 expiresIn: '30d'
             });
@@ -85,7 +80,6 @@ const loginHospital = async (req, res) => {
     }
 };
 
-// Obtém perfil do hospital
 const getHospitalProfile = async (req, res) => {
     try {
         const hospital = await prisma.hospital.findUnique({
@@ -111,8 +105,25 @@ const getHospitalProfile = async (req, res) => {
     }
 };
 
+// Função para obter as notificações do hospital
+const getHospitalNotifications = async (req, res) => {
+    try {
+        const hospitalId = req.hospital.id;
+        const notifications = await prisma.notification.findMany({
+            where: { hospitalId },
+            orderBy: { createdAt: 'desc' },
+        });
+
+        res.json(notifications);
+    } catch (error) {
+        console.error('Erro ao obter notificações do hospital:', error);
+        res.status(500).json({ message: 'Erro ao obter notificações do hospital' });
+    }
+};
+
 module.exports = {
     registerHospital,
     loginHospital,
-    getHospitalProfile
+    getHospitalProfile,
+    getHospitalNotifications
 };
